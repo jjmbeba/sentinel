@@ -6,21 +6,21 @@ import {
 	jsonb,
 	pgTable,
 	primaryKey,
-	serial,
 	text,
 	timestamp,
 	unique,
+	uuid,
 } from "drizzle-orm/pg-core";
 import { user } from "./auth";
 
 export const tasks = pgTable(
 	"tasks",
 	{
-		id: serial("id").primaryKey(),
+		id: uuid("id").primaryKey().defaultRandom(),
 		name: text("name").notNull(),
-		parentTaskId: text("parent_task_id").references(
+		parentTaskId: uuid("parent_task_id").references(
 			(): AnyPgColumn => tasks.id,
-			{ onDelete: "set null" },
+			{ onDelete: "set null" }
 		),
 		userId: text("user_id")
 			.notNull()
@@ -38,16 +38,16 @@ export const tasks = pgTable(
 		estimatedDurationMinutes: integer("estimated_duration_minutes").notNull(),
 	},
 	(t) => [
-		index("user_idx").on(t.userId),
+		index("user_tasks_idx").on(t.userId),
 		index("due_date_idx").on(t.dueDate),
 		index("status_idx").on(t.status),
-	],
+	]
 );
 
 export const category = pgTable(
 	"categories",
 	{
-		id: serial("id").primaryKey(),
+		id: uuid("id").primaryKey().defaultRandom(),
 		name: text("name").notNull(),
 		userId: text("user_id")
 			.notNull()
@@ -56,16 +56,16 @@ export const category = pgTable(
 		createdAt: timestamp("created_at").defaultNow().notNull(),
 		updatedAt: timestamp("updated_at").defaultNow().notNull(),
 	},
-	(t) => [unique("user_id_name").on(t.userId, t.name)],
+	(t) => [unique("user_id_name_categories").on(t.userId, t.name)]
 );
 
 export const taskCategories = pgTable(
 	"task_categories",
 	{
-		taskId: text("task_id")
+		taskId: uuid("task_id")
 			.notNull()
 			.references(() => tasks.id, { onDelete: "cascade" }),
-		categoryId: text("category_id")
+		categoryId: uuid("category_id")
 			.notNull()
 			.references(() => category.id, { onDelete: "cascade" }),
 	},
@@ -73,13 +73,13 @@ export const taskCategories = pgTable(
 		primaryKey({
 			columns: [t.taskId, t.categoryId],
 		}),
-	],
+	]
 );
 
 export const tags = pgTable(
 	"tags",
 	{
-		id: serial("id").primaryKey(),
+		id: uuid("id").primaryKey().defaultRandom(),
 		name: text("name").notNull(),
 		userId: text("user_id")
 			.notNull()
@@ -87,16 +87,16 @@ export const tags = pgTable(
 		createdAt: timestamp("created_at").defaultNow().notNull(),
 		updatedAt: timestamp("updated_at").defaultNow().notNull(),
 	},
-	(t) => [unique("user_id_name").on(t.userId, t.name)],
+	(t) => [unique("user_id_name_tags").on(t.userId, t.name)]
 );
 
 export const taskTags = pgTable(
 	"task_tags",
 	{
-		taskId: text("task_id")
+		taskId: uuid("task_id")
 			.notNull()
 			.references(() => tasks.id, { onDelete: "cascade" }),
-		tagId: text("tag_id")
+		tagId: uuid("tag_id")
 			.notNull()
 			.references(() => tags.id, { onDelete: "cascade" }),
 	},
@@ -104,14 +104,14 @@ export const taskTags = pgTable(
 		primaryKey({
 			columns: [t.taskId, t.tagId],
 		}),
-	],
+	]
 );
 
 export const timeLogs = pgTable(
 	"time_logs",
 	{
-		id: serial("id").primaryKey(),
-		taskId: text("task_id")
+		id: uuid("id").primaryKey().defaultRandom(),
+		taskId: uuid("task_id")
 			.notNull()
 			.references(() => tasks.id, { onDelete: "cascade" }),
 		userId: text("user_id")
@@ -125,35 +125,38 @@ export const timeLogs = pgTable(
 		createdAt: timestamp("created_at").defaultNow().notNull(),
 		updatedAt: timestamp("updated_at").defaultNow().notNull(),
 	},
-	(t) => [index("user_idx").on(t.userId), index("task_idx").on(t.taskId)],
+	(t) => [
+		index("user_time_logs_idx").on(t.userId),
+		index("task_time_logs_idx").on(t.taskId),
+	]
 );
 
 export const activityLogs = pgTable(
 	"activity_logs",
 	{
-		id: serial("id").primaryKey(),
+		id: uuid("id").primaryKey().defaultRandom(),
 		userId: text("user_id")
 			.notNull()
 			.references(() => user.id, { onDelete: "cascade" }),
 		timestamp: timestamp("timestamp").notNull(),
 		activityType: text("activity_type").notNull(), //app_focus_change', 'keyboard_activity', 'mouse_activity', 'url_visited'
 		details: jsonb("details"),
-		currentTaskId: text("current_task_id").references(() => tasks.id, {
+		currentTaskId: uuid("current_task_id").references(() => tasks.id, {
 			onDelete: "set null",
 		}),
 		isProductiveActivity: boolean("is_productive_activity").notNull(),
 	},
 	(t) => [
-		index("user_idx").on(t.userId),
+		index("user_activity_logs_idx").on(t.userId),
 		index("current_task_idx").on(t.currentTaskId),
 		index("timestamp_idx").on(t.timestamp),
-	],
+	]
 );
 
 export const aiInsights = pgTable(
 	"ai_insights",
 	{
-		id: serial("id").primaryKey(),
+		id: uuid("id").primaryKey().defaultRandom(),
 		userId: text("user_id")
 			.notNull()
 			.references(() => user.id, { onDelete: "cascade" }),
@@ -164,22 +167,22 @@ export const aiInsights = pgTable(
 		isActionable: boolean("is_actionable").notNull(),
 		userFeedback: text("user_feedback"),
 		feedBackTimestamp: timestamp("feed_back_timestamp"),
-		targetTaskId: text("target_task_id").references(() => tasks.id, {
+		targetTaskId: uuid("target_task_id").references(() => tasks.id, {
 			onDelete: "set null",
 		}),
 		isDismissed: boolean("is_dismissed").notNull().default(false),
 	},
 	(t) => [
-		index("user_idx").on(t.userId),
+		index("user_ai_insights_idx").on(t.userId),
 		index("generated_at_idx").on(t.generatedAt),
-	],
+	]
 );
 
 export const recurringTasks = pgTable(
 	"recurring_tasks",
 	{
-		id: serial("id").primaryKey(),
-		originalTaskId: text("original_task_id")
+		id: uuid("id").primaryKey().defaultRandom(),
+		originalTaskId: uuid("original_task_id")
 			.notNull()
 			.references(() => tasks.id, { onDelete: "cascade" }),
 		userId: text("user_id")
@@ -197,7 +200,7 @@ export const recurringTasks = pgTable(
 		updatedAt: timestamp("updated_at").defaultNow().notNull(),
 	},
 	(t) => [
-		index("user_idx").on(t.userId),
+		index("user_recurring_tasks_idx").on(t.userId),
 		unique("original_task_id_idx").on(t.originalTaskId, t.instanceDate),
-	],
+	]
 );
