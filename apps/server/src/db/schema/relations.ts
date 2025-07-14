@@ -1,8 +1,18 @@
-import { tasks, taskCategories, taskTags, timeLogs, activityLogs, aiInsights, recurringTasks, category, tags } from "./core";
-import { user } from "./auth";
 import { relations } from "drizzle-orm";
+import { user } from "./auth";
+import {
+	activityLogs,
+	aiInsights,
+	category,
+	recurringTasks,
+	tags,
+	taskCategories,
+	tasks,
+	taskTags,
+	timeLogs,
+} from "./core";
 
-export const userRelations = relations(user, ({many}) => ({
+export const userRelations = relations(user, ({ many }) => ({
 	tasks: many(tasks),
 	categories: many(category),
 	tags: many(tags),
@@ -12,8 +22,7 @@ export const userRelations = relations(user, ({many}) => ({
 	recurringTasks: many(recurringTasks),
 }));
 
-
-export const tasksRelations = relations(tasks, ({many, one}) => ({
+export const tasksRelations = relations(tasks, ({ many, one }) => ({
 	taskCategories: many(taskCategories),
 	taskTags: many(taskTags),
 	parentTask: one(tasks, {
@@ -27,15 +36,15 @@ export const tasksRelations = relations(tasks, ({many, one}) => ({
 	recurringTasks: many(recurringTasks),
 }));
 
-export const categoriesRelations = relations(category, ({many}) => ({
+export const categoriesRelations = relations(category, ({ many }) => ({
 	taskCategories: many(taskCategories),
 }));
 
-export const tagsRelations = relations(tags, ({many}) => ({
+export const tagsRelations = relations(tags, ({ many }) => ({
 	taskTags: many(taskTags),
 }));
 
-export const taskCategoriesRelations = relations(taskCategories, ({one}) => ({
+export const taskCategoriesRelations = relations(taskCategories, ({ one }) => ({
 	task: one(tasks, {
 		fields: [taskCategories.taskId],
 		references: [tasks.id],
@@ -46,7 +55,7 @@ export const taskCategoriesRelations = relations(taskCategories, ({one}) => ({
 	}),
 }));
 
-export const taskTagsRelations = relations(taskTags, ({one}) => ({
+export const taskTagsRelations = relations(taskTags, ({ one }) => ({
 	task: one(tasks, {
 		fields: [taskTags.taskId],
 		references: [tasks.id],
@@ -57,28 +66,28 @@ export const taskTagsRelations = relations(taskTags, ({one}) => ({
 	}),
 }));
 
-export const timeLogsRelations = relations(timeLogs, ({one}) => ({
+export const timeLogsRelations = relations(timeLogs, ({ one }) => ({
 	task: one(tasks, {
 		fields: [timeLogs.taskId],
 		references: [tasks.id],
 	}),
 }));
 
-export const activityLogsRelations = relations(activityLogs, ({one}) => ({
+export const activityLogsRelations = relations(activityLogs, ({ one }) => ({
 	task: one(tasks, {
 		fields: [activityLogs.currentTaskId],
 		references: [tasks.id],
 	}),
 }));
 
-export const aiInsightsRelations = relations(aiInsights, ({one}) => ({
+export const aiInsightsRelations = relations(aiInsights, ({ one }) => ({
 	task: one(tasks, {
 		fields: [aiInsights.targetTaskId],
 		references: [tasks.id],
 	}),
 }));
 
-export const recurringTasksRelations = relations(recurringTasks, ({one}) => ({
+export const recurringTasksRelations = relations(recurringTasks, ({ one }) => ({
 	originalTask: one(tasks, {
 		fields: [recurringTasks.originalTaskId],
 		references: [tasks.id],
