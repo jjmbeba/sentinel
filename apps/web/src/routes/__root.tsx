@@ -24,7 +24,7 @@ export const Route = createRootRouteWithContext<RouterAppContext>()({
   head: () => ({
     meta: [
       {
-        title: "My App",
+        title: "Sentinel",
       },
       {
         name: "description",
@@ -36,6 +36,10 @@ export const Route = createRootRouteWithContext<RouterAppContext>()({
         rel: "icon",
         href: "/favicon.ico",
       },
+      {
+        rel: "stylesheet",
+        href: "https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&display=swap"
+      }
     ],
   }),
 });
