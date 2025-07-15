@@ -15,7 +15,9 @@ export default function Header() {
 		select: (s) => s.location.pathname,
 	});
 
-	if (pathname.startsWith("/login") || pathname.startsWith("/sign-up")) {
+	const excludedPaths = ["/login", "/sign-up", "/forget-password"];
+
+	if (excludedPaths.some((path) => pathname.startsWith(path))) {
 		return null;
 	}
 
