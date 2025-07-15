@@ -79,9 +79,9 @@ export function ForgotPasswordForm({
 					{([isSubmitting, canSubmit]) => (
 						<AuthSubmitBtn
 							canSubmit={canSubmit}
-							label="Reset Password"
+							label="Request Password Reset"
 							loading={isSubmitting}
-							submittingLabel="Resetting password..."
+							submittingLabel="Requesting password reset..."
 						/>
 					)}
 				</form.Subscribe>
