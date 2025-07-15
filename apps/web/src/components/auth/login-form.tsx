@@ -1,12 +1,14 @@
 import { useForm } from "@tanstack/react-form";
-import { EyeIcon, EyeOffIcon, MailIcon } from "lucide-react";
+import { Link } from "@tanstack/react-router";
+import { EyeIcon, EyeOffIcon, Loader2Icon, MailIcon } from "lucide-react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { cn } from "@/lib/utils";
 import { signInSchema } from "@/schemas/auth";
-import FieldErrorMessage from "./ui/field-error-msg";
+import FieldErrorMessage from "../ui/field-error-msg";
+import AuthFormHeader from "./auth-form-header";
 
 export function LoginForm({
 	className,
@@ -39,12 +41,10 @@ export function LoginForm({
 			}}
 			{...props}
 		>
-			<div className="flex flex-col items-center gap-2 text-center">
-				<h1 className="font-bold text-2xl">Login to your account</h1>
-				<p className="text-balance text-muted-foreground text-sm">
-					Enter your email below to login to your account
-				</p>
-			</div>
+			<AuthFormHeader
+				description="Enter your email below to login to your account"
+				title="Login to your account"
+			/>
 			<div className="grid gap-6">
 				<form.Field name="email">
 					{(field) => (
@@ -127,11 +127,18 @@ export function LoginForm({
 					{([isSubmitting, canSubmit]) => (
 						<Button
 							className="w-full"
-							disabled={!canSubmit}
+							disabled={!canSubmit || isSubmitting}
 							size="sm"
 							type="submit"
 						>
-							{isSubmitting ? "Logging in..." : "Login"}
+							{isSubmitting ? (
+								<div className="flex items-center gap-2">
+									<Loader2Icon className="size-4 animate-spin" />
+									Logging in...
+								</div>
+							) : (
+								"Login"
+							)}
 						</Button>
 					)}
 				</form.Subscribe>
@@ -153,9 +160,9 @@ export function LoginForm({
 			</div>
 			<div className="text-center text-sm">
 				Don&apos;t have an account?{" "}
-				<a className="underline underline-offset-4" href="/">
+				<Link className="underline underline-offset-4" to="/sign-up">
 					Sign up
-				</a>
+				</Link>
 			</div>
 		</form>
 	);

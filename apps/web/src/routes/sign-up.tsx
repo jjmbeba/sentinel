@@ -1,11 +1,11 @@
 import { createFileRoute } from "@tanstack/react-router";
 import AuthContainer from "@/components/auth/auth-container";
-import { LoginForm } from "@/components/auth/login-form";
+import { SignUpForm } from "@/components/auth/sign-up-form";
 
-export const Route = createFileRoute("/login")({
+export const Route = createFileRoute("/sign-up")({
 	component: RouteComponent,
 });
 
 function RouteComponent() {
-	return <AuthContainer authForm={<LoginForm />} type="login" />;
+	return <AuthContainer authForm={<SignUpForm />} type="signup" />;
 }

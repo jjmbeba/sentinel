@@ -15,7 +15,7 @@ export default function Header() {
 		select: (s) => s.location.pathname,
 	});
 
-	if (pathname.startsWith("/login") || pathname.startsWith("/signup")) {
+	if (pathname.startsWith("/login") || pathname.startsWith("/sign-up")) {
 		return null;
 	}
 

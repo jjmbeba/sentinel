@@ -13,14 +13,14 @@ const app = new Elysia()
 			methods: ["GET", "POST", "OPTIONS"],
 			allowedHeaders: ["Content-Type", "Authorization"],
 			credentials: true,
-		}),
+		})
 	)
-	.all("/api/auth/*", async (context) => {
+	.all("/api/auth/*", (context) => {
 		const { request } = context;
 		if (["POST", "GET"].includes(request.method)) {
 			return auth.handler(request);
 		}
-		context.error(405);
+		return context.error(405);
 	})
 	.all("/trpc/*", async (context) => {
 		const res = await fetchRequestHandler({
