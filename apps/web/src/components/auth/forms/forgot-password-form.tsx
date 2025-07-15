@@ -1,5 +1,7 @@
 import { useForm } from "@tanstack/react-form";
+import { toast } from "sonner";
 import FieldErrorMessage from "@/components/ui/field-error-msg";
+import { requestPasswordReset } from "@/lib/auth-client";
 import { cn } from "@/lib/utils";
 import { forgotPasswordSchema } from "@/schemas/auth";
 import AuthFormHeader from "../common/auth-form-header";
@@ -18,8 +20,22 @@ export function ForgotPasswordForm({
 		defaultValues: {
 			email: "",
 		},
-		onSubmit: ({ value: _value }) => {
+		onSubmit: async ({ value: _value }) => {
 			// console.log(_value);
+			await requestPasswordReset(
+				{
+					email: _value.email,
+					redirectTo: "/reset-password",
+				},
+				{
+					onSuccess: () => {
+						toast.success("Password reset email sent");
+					},
+					onError: (error) => {
+						toast.error(error.error.message);
+					},
+				}
+			);
 		},
 	});
 	return (
