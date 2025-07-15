@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button";
+import { signIn } from "@/lib/auth-client";
 
 const SocialAuthButtons = () => {
 	return (
@@ -8,7 +9,17 @@ const SocialAuthButtons = () => {
 					Or continue with
 				</span>
 			</div>
-			<Button className="w-full" size="sm" variant="outline">
+			<Button
+				className="w-full"
+				onClick={async () =>
+					await signIn.social({
+						provider: "github",
+					})
+				}
+				size="sm"
+				type="button"
+				variant="outline"
+			>
 				<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
 					<title>GitHub</title>
 					<path

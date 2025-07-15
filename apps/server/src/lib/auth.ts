@@ -5,37 +5,36 @@ import { db } from "../db";
 import * as schema from "../db/schema/auth";
 import { resetPasswordHtml } from "./react-email";
 import { resend } from "./resend";
+import { must, replaceDomain } from "./utils";
 
-// Helper to replace the domain in a URL with the CORS_ORIGIN env and remove '/api/auth' from the path
-const replaceDomain = (originalUrl: string, newOrigin: string): string => {
-	try {
-		const urlObj = new URL(originalUrl);
-		let path = urlObj.pathname;
-		// Remove '/api/auth' prefix if present
-		if (path.startsWith("/api/auth")) {
-			path = path.replace("/api/auth", "");
-			if (!path.startsWith("/")) {
-				path = `/${path}`;
-			}
-		}
-		const origin = newOrigin.endsWith("/") ? newOrigin.slice(0, -1) : newOrigin;
-		return `${origin}${path}${urlObj.search}${urlObj.hash}`;
-	} catch {
-		return originalUrl;
-	}
-};
+const corsOrigin = must(process.env.CORS_ORIGIN, "CORS_ORIGIN is required");
+const githubClientId = must(
+	process.env.GITHUB_CLIENT_ID,
+	"GITHUB_CLIENT_ID is required"
+);
+const githubClientSecret = must(
+	process.env.GITHUB_CLIENT_SECRET,
+	"GITHUB_CLIENT_SECRET is required"
+);
+const secret = must(
+	process.env.BETTER_AUTH_SECRET,
+	"BETTER_AUTH_SECRET is required"
+);
+const baseURL = must(
+	process.env.BETTER_AUTH_URL,
+	"BETTER_AUTH_URL is required"
+);
 
 export const auth = betterAuth({
 	database: drizzleAdapter(db, {
 		provider: "pg",
 		schema,
 	}),
-	trustedOrigins: [process.env.CORS_ORIGIN || ""],
+	trustedOrigins: [corsOrigin],
 	emailAndPassword: {
 		enabled: true,
 		sendResetPassword: async ({ url, user }) => {
-			const corsOrigin = process.env.CORS_ORIGIN || "";
-			const resetUrl = corsOrigin ? replaceDomain(url, corsOrigin) : url;
+			const resetUrl = replaceDomain(url, corsOrigin);
 			const { error } = await resend.emails.send({
 				from: "Acme <onboarding@resend.dev>",
 				to: ["delivered@resend.dev"], // TODO: change to user.email on production
@@ -48,6 +47,12 @@ export const auth = betterAuth({
 			}
 		},
 	},
-	secret: process.env.BETTER_AUTH_SECRET,
-	baseURL: process.env.BETTER_AUTH_URL,
+	socialProviders: {
+		github: {
+			clientId: githubClientId,
+			clientSecret: githubClientSecret,
+		},
+	},
+	secret,
+	baseURL,
 });
