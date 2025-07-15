@@ -28,7 +28,7 @@ export function ForgotPasswordForm({
 			onSubmit={(e) => {
 				e.preventDefault();
 
-				// form.handleSubmit();
+				form.handleSubmit();
 			}}
 			{...props}
 		>
