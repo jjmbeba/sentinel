@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import { GalleryVerticalEndIcon } from "../icons/gallery-vertical-end";
+import { GalleryVerticalEndIcon } from "../../icons/gallery-vertical-end";
 
 type Props = {
 	authForm: React.ReactNode;

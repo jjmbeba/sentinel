@@ -1,14 +1,16 @@
 import { useForm } from "@tanstack/react-form";
 import { Link } from "@tanstack/react-router";
-import { EyeIcon, EyeOffIcon, Loader2Icon, MailIcon } from "lucide-react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { cn } from "@/lib/utils";
 import { signInSchema } from "@/schemas/auth";
-import FieldErrorMessage from "../ui/field-error-msg";
-import AuthFormHeader from "./auth-form-header";
+import FieldErrorMessage from "../../ui/field-error-msg";
+import AuthFormHeader from "../common/auth-form-header";
+import AuthSubmitBtn from "../common/auth-submit-button";
+import EmailInput from "../common/email-auth-input";
+import ForgotPasswordLink from "../common/forgot-password-link";
+import FormField from "../common/form-field";
+import PasswordInput from "../common/password-auth-input";
 
 export function LoginForm({
 	className,
@@ -48,98 +50,57 @@ export function LoginForm({
 			<div className="grid gap-6">
 				<form.Field name="email">
 					{(field) => (
-						<div className="grid gap-3">
-							<Label htmlFor="email">Email</Label>
-							<div className="relative">
-								<Input
-									aria-invalid={!!field.state.meta.errors.length}
-									className="peer pe-9"
-									id="email"
-									onBlur={field.handleBlur}
-									onChange={(e) => field.handleChange(e.target.value)}
-									placeholder="m@example.com"
-									value={field.state.value}
-								/>
-								<div className="pointer-events-none absolute inset-y-0 end-0 flex items-center justify-center pe-3 text-muted-foreground/80 peer-disabled:opacity-50">
-									<MailIcon aria-hidden="true" size={16} />
-								</div>
-							</div>
-							{field.state.meta.errors.map((error) => (
+						<FormField
+							errors={field.state.meta.errors.map((error) => (
 								<FieldErrorMessage
 									key={error?.message}
 									message={error?.message}
 								/>
 							))}
-						</div>
+							label="Email"
+						>
+							<EmailInput
+								hasErrors={!!field.state.meta.errors.length}
+								onBlur={field.handleBlur}
+								onChange={(e) => field.handleChange(e.target.value)}
+								value={field.state.value}
+							/>
+						</FormField>
 					)}
 				</form.Field>
 				<form.Field name="password">
 					{(field) => (
-						<div className="grid gap-3">
-							<div className="flex items-center">
-								<Label htmlFor="password">Password</Label>
-								<a
-									className="ml-auto text-sm underline-offset-4 hover:underline"
-									href="/"
-								>
-									Forgot your password?
-								</a>
-							</div>
-							<div className="relative">
-								<Input
-									aria-invalid={!!field.state.meta.errors.length}
-									className="pe-9"
-									id="password"
-									onBlur={field.handleBlur}
-									onChange={(e) => field.handleChange(e.target.value)}
-									type={isVisible ? "text" : "password"}
-									value={field.state.value}
-								/>
-								<Button
-									aria-controls="password"
-									aria-label={isVisible ? "Hide password" : "Show password"}
-									aria-pressed={isVisible}
-									className="absolute inset-y-0 end-0 flex h-full w-9 items-center justify-center rounded-e-md text-muted-foreground hover:text-foreground focus:z-10 focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50"
-									onClick={toggleVisibility}
-									size="sm"
-									type="button"
-									variant="ghost"
-								>
-									{isVisible ? (
-										<EyeOffIcon aria-hidden="true" size={16} />
-									) : (
-										<EyeIcon aria-hidden="true" size={16} />
-									)}
-								</Button>
-							</div>
-							{field.state.meta.errors.map((error) => (
+						<FormField
+							errors={field.state.meta.errors.map((error) => (
 								<FieldErrorMessage
 									key={error?.message}
 									message={error?.message}
 								/>
 							))}
-						</div>
+							label="Password"
+							optionalLink={<ForgotPasswordLink />}
+						>
+							<PasswordInput
+								hasErrors={!!field.state.meta.errors.length}
+								isVisible={isVisible}
+								onBlur={field.handleBlur}
+								onChange={(e) => field.handleChange(e.target.value)}
+								toggleVisibility={toggleVisibility}
+								value={field.state.value}
+							/>
+						</FormField>
 					)}
 				</form.Field>
 				<form.Subscribe
 					selector={({ isSubmitting, canSubmit }) => [isSubmitting, canSubmit]}
 				>
 					{([isSubmitting, canSubmit]) => (
-						<Button
-							className="w-full"
-							disabled={!canSubmit || isSubmitting}
-							size="sm"
-							type="submit"
-						>
-							{isSubmitting ? (
-								<div className="flex items-center gap-2">
-									<Loader2Icon className="size-4 animate-spin" />
-									Logging in...
-								</div>
-							) : (
-								"Login"
-							)}
-						</Button>
+						<AuthSubmitBtn
+							canSubmit={canSubmit}
+							label="Login"
+							loading={isSubmitting}
+							submittingLabel="Logging in..."
+						/>
 					)}
 				</form.Subscribe>
 				<div className="relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-border after:border-t">
