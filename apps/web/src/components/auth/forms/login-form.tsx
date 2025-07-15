@@ -1,6 +1,8 @@
 import { useForm } from "@tanstack/react-form";
-import { Link } from "@tanstack/react-router";
+import { Link, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
+import { toast } from "sonner";
+import { signIn } from "@/lib/auth-client";
 import { cn } from "@/lib/utils";
 import { signInSchema } from "@/schemas/auth";
 import FieldErrorMessage from "../../ui/field-error-msg";
@@ -18,6 +20,7 @@ export function LoginForm({
 }: React.ComponentProps<"form">) {
 	const [isVisible, setIsVisible] = useState(false);
 	const toggleVisibility = () => setIsVisible((prevState) => !prevState);
+	const navigate = useNavigate();
 
 	const form = useForm({
 		validators: {
@@ -27,9 +30,21 @@ export function LoginForm({
 			email: "",
 			password: "",
 		},
-		onSubmit: ({ value: _value }) => {
-			// TODO: Implement login logic
-			// console.log(_value);
+		onSubmit: async ({ value }) => {
+			await signIn.email(
+				{
+					...value,
+				},
+				{
+					onSuccess: () => {
+						navigate({ to: "/" });
+						toast.success("Login successful");
+					},
+					onError: (error) => {
+						toast.error(error.error.message);
+					},
+				}
+			);
 		},
 	});
 

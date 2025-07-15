@@ -1,7 +1,9 @@
 import { useForm } from "@tanstack/react-form";
-import { Link } from "@tanstack/react-router";
+import { Link, useNavigate } from "@tanstack/react-router";
 import { UserIcon } from "lucide-react";
 import { useState } from "react";
+import { toast } from "sonner";
+import { signUp } from "@/lib/auth-client";
 import { cn } from "@/lib/utils";
 import { signUpSchema } from "@/schemas/auth";
 import FieldErrorMessage from "../../ui/field-error-msg";
@@ -17,6 +19,7 @@ export function SignUpForm({
 	className,
 	...props
 }: React.ComponentProps<"form">) {
+	const navigate = useNavigate();
 	const form = useForm({
 		validators: {
 			onBlur: signUpSchema,
@@ -27,9 +30,21 @@ export function SignUpForm({
 			password: "",
 			confirmPassword: "",
 		},
-		onSubmit: ({ value: _value }) => {
-			// TODO: Implement sign up logic
-			// console.log(_value);
+		onSubmit: async ({ value }) => {
+			await signUp.email(
+				{
+					...value,
+				},
+				{
+					onSuccess: () => {
+						navigate({ to: "/" });
+						toast.success("Sign up successful");
+					},
+					onError: (error) => {
+						toast.error(error.error.message);
+					},
+				}
+			);
 		},
 	});
 

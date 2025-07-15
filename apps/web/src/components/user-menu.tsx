@@ -1,3 +1,4 @@
+import { Link, useNavigate } from "@tanstack/react-router";
 import {
 	DropdownMenu,
 	DropdownMenuContent,
@@ -6,15 +7,13 @@ import {
 	DropdownMenuSeparator,
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { authClient } from "@/lib/auth-client";
-import { useNavigate } from "@tanstack/react-router";
+import { signOut, useSession } from "@/lib/auth-client";
 import { Button } from "./ui/button";
 import { Skeleton } from "./ui/skeleton";
-import { Link } from "@tanstack/react-router";
 
 export default function UserMenu() {
 	const navigate = useNavigate();
-	const { data: session, isPending } = authClient.useSession();
+	const { data: session, isPending } = useSession();
 
 	if (isPending) {
 		return <Skeleton className="h-9 w-24" />;
@@ -22,7 +21,7 @@ export default function UserMenu() {
 
 	if (!session) {
 		return (
-			<Button variant="outline" size={'sm'} effect={'shineHover'} asChild>
+			<Button asChild effect={"shineHover"} size={"sm"} variant="outline">
 				<Link to="/login">Sign In</Link>
 			</Button>
 		);
@@ -31,7 +30,9 @@ export default function UserMenu() {
 	return (
 		<DropdownMenu>
 			<DropdownMenuTrigger asChild>
-				<Button variant="outline" size="sm" effect={'shineHover'}>{session.user.name}</Button>
+				<Button effect={"shineHover"} size="sm" variant="outline">
+					{session.user.name}
+				</Button>
 			</DropdownMenuTrigger>
 			<DropdownMenuContent className="bg-card">
 				<DropdownMenuLabel>My Account</DropdownMenuLabel>
@@ -39,10 +40,9 @@ export default function UserMenu() {
 				<DropdownMenuItem>{session.user.email}</DropdownMenuItem>
 				<DropdownMenuItem asChild>
 					<Button
-						variant="destructive"
 						className="w-full"
 						onClick={() => {
-							authClient.signOut({
+							signOut({
 								fetchOptions: {
 									onSuccess: () => {
 										navigate({
@@ -52,6 +52,7 @@ export default function UserMenu() {
 								},
 							});
 						}}
+						variant="destructive"
 					>
 						Sign Out
 					</Button>
