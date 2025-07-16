@@ -1,4 +1,4 @@
-import { linkOptions } from "@tanstack/react-router";
+import { Link, linkOptions } from "@tanstack/react-router";
 import {
 	ChartLineIcon,
 	HomeIcon,
@@ -7,7 +7,7 @@ import {
 	TagsIcon,
 } from "lucide-react";
 import type * as React from "react";
-import { NavUser } from "@/components/nav-user";
+import { NavUser } from "@/components/sidebar/nav-user";
 import {
 	Sidebar,
 	SidebarContent,
@@ -21,13 +21,13 @@ import {
 	SidebarRail,
 } from "@/components/ui/sidebar";
 import { useSession } from "@/lib/auth-client";
-import Logo from "./auth/common/logo";
-import { Skeleton } from "./ui/skeleton";
+import Logo from "../auth/common/logo";
+import { Skeleton } from "../ui/skeleton";
 
 const sidebarLinks = linkOptions([
 	{
 		label: "Home",
-		to: "/",
+		to: "/dashboard",
 		icon: HomeIcon,
 	},
 	{
@@ -90,10 +90,14 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
 						{sidebarLinks.map((item) => (
 							<SidebarMenuItem key={item.label}>
 								<SidebarMenuButton asChild>
-									<a href={item.to}>
+									<Link
+										activeOptions={{ exact: true }}
+										activeProps={{ className: "bg-sidebar-accent" }}
+										to={item.to}
+									>
 										<item.icon />
 										<span>{item.label}</span>
-									</a>
+									</Link>
 								</SidebarMenuButton>
 							</SidebarMenuItem>
 						))}

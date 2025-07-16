@@ -7,8 +7,8 @@ import {
 	useRouterState,
 } from "@tanstack/react-router";
 import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
-import Loader from "@/components/loader";
-import { ThemeProvider } from "@/components/theme-provider";
+import Loader from "@/components/auth/common/loader";
+import { ThemeProvider } from "@/components/providers/theme-provider";
 import { Toaster } from "@/components/ui/sonner";
 import type { trpc } from "@/utils/trpc";
 import "../index.css";

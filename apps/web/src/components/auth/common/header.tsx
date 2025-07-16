@@ -1,7 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import { cn } from "@/lib/utils";
+import { buttonVariants } from "../../ui/button";
 import { ModeToggle } from "./mode-toggle";
-import { buttonVariants } from "./ui/button";
 import UserMenu from "./user-menu";
 
 export default function Header() {

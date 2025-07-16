@@ -8,8 +8,8 @@ import {
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { signOut, useSession } from "@/lib/auth-client";
-import { Button } from "./ui/button";
-import { Skeleton } from "./ui/skeleton";
+import { Button } from "../../ui/button";
+import { Skeleton } from "../../ui/skeleton";
 
 export default function UserMenu() {
 	const navigate = useNavigate();
