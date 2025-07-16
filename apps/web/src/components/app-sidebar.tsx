@@ -1,141 +1,61 @@
+import { linkOptions } from "@tanstack/react-router";
 import {
-	BookOpen,
-	Bot,
-	Frame,
-	Map as MapIcon,
-	PieChart,
-	Settings2,
-	SquareTerminal,
+	ChartLineIcon,
+	HomeIcon,
+	ListIcon,
+	SettingsIcon,
+	TagsIcon,
 } from "lucide-react";
 import type * as React from "react";
-
-import { NavMain } from "@/components/nav-main";
-import { NavProjects } from "@/components/nav-projects";
 import { NavUser } from "@/components/nav-user";
 import {
 	Sidebar,
 	SidebarContent,
 	SidebarFooter,
+	SidebarGroup,
+	SidebarGroupLabel,
 	SidebarHeader,
+	SidebarMenu,
 	SidebarMenuButton,
+	SidebarMenuItem,
 	SidebarRail,
 } from "@/components/ui/sidebar";
 import { useSession } from "@/lib/auth-client";
 import Logo from "./auth/common/logo";
 import { Skeleton } from "./ui/skeleton";
 
-// This is sample data.
-const data = {
-	user: {
-		name: "shadcn",
-		email: "m@example.com",
-		avatar: "/avatars/shadcn.jpg",
+const sidebarLinks = linkOptions([
+	{
+		label: "Home",
+		to: "/",
+		icon: HomeIcon,
 	},
-	navMain: [
-		{
-			title: "Playground",
-			url: "#",
-			icon: SquareTerminal,
-			isActive: true,
-			items: [
-				{
-					title: "History",
-					url: "#",
-				},
-				{
-					title: "Starred",
-					url: "#",
-				},
-				{
-					title: "Settings",
-					url: "#",
-				},
-			],
-		},
-		{
-			title: "Models",
-			url: "#",
-			icon: Bot,
-			items: [
-				{
-					title: "Genesis",
-					url: "#",
-				},
-				{
-					title: "Explorer",
-					url: "#",
-				},
-				{
-					title: "Quantum",
-					url: "#",
-				},
-			],
-		},
-		{
-			title: "Documentation",
-			url: "#",
-			icon: BookOpen,
-			items: [
-				{
-					title: "Introduction",
-					url: "#",
-				},
-				{
-					title: "Get Started",
-					url: "#",
-				},
-				{
-					title: "Tutorials",
-					url: "#",
-				},
-				{
-					title: "Changelog",
-					url: "#",
-				},
-			],
-		},
-		{
-			title: "Settings",
-			url: "#",
-			icon: Settings2,
-			items: [
-				{
-					title: "General",
-					url: "#",
-				},
-				{
-					title: "Team",
-					url: "#",
-				},
-				{
-					title: "Billing",
-					url: "#",
-				},
-				{
-					title: "Limits",
-					url: "#",
-				},
-			],
-		},
-	],
-	projects: [
-		{
-			name: "Design Engineering",
-			url: "#",
-			icon: Frame,
-		},
-		{
-			name: "Sales & Marketing",
-			url: "#",
-			icon: PieChart,
-		},
-		{
-			name: "Travel",
-			url: "#",
-			icon: MapIcon,
-		},
-	],
-};
+	{
+		label: "My Tasks",
+		to: "/dashboard/my-tasks",
+		icon: ListIcon,
+	},
+	{
+		label: "Insights and Trends",
+		to: "/dashboard/insights-trends",
+		icon: ChartLineIcon,
+	},
+	{
+		label: "Categories",
+		to: "/dashboard/categories",
+		icon: TagsIcon,
+	},
+	{
+		label: "Tags",
+		to: "/dashboard/tags",
+		icon: TagsIcon,
+	},
+	{
+		label: "Settings",
+		to: "/dashboard/settings",
+		icon: SettingsIcon,
+	},
+]);
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
 	const { data: session, isPending: isLoadingSession } = useSession();
@@ -164,8 +84,21 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
 				</SidebarMenuButton>
 			</SidebarHeader>
 			<SidebarContent>
-				<NavMain items={data.navMain} />
-				<NavProjects projects={data.projects} />
+				<SidebarGroup className="group-data-[collapsible=icon]:hidden">
+					<SidebarGroupLabel>Pages</SidebarGroupLabel>
+					<SidebarMenu>
+						{sidebarLinks.map((item) => (
+							<SidebarMenuItem key={item.label}>
+								<SidebarMenuButton asChild>
+									<a href={item.to}>
+										<item.icon />
+										<span>{item.label}</span>
+									</a>
+								</SidebarMenuButton>
+							</SidebarMenuItem>
+						))}
+					</SidebarMenu>
+				</SidebarGroup>
 			</SidebarContent>
 			<SidebarFooter>{footerContent}</SidebarFooter>
 			<SidebarRail />

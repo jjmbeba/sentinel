@@ -1,5 +1,3 @@
-"use client";
-
 import type { User } from "better-auth";
 import { BadgeCheck, Bell, ChevronsUpDown, LogOut } from "lucide-react";
 import { useMemo } from "react";
