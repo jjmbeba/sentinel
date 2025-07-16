@@ -76,15 +76,12 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
 	return (
 		<Sidebar collapsible="icon" {...props}>
 			<SidebarHeader>
-				<SidebarMenuButton
-					className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
-					size="lg"
-				>
+				<SidebarMenuButton className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground">
 					<Logo />
 				</SidebarMenuButton>
 			</SidebarHeader>
 			<SidebarContent>
-				<SidebarGroup className="group-data-[collapsible=icon]:hidden">
+				<SidebarGroup>
 					<SidebarGroupLabel>Pages</SidebarGroupLabel>
 					<SidebarMenu>
 						{sidebarLinks.map((item) => (
