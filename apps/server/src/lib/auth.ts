@@ -53,6 +53,12 @@ export const auth = betterAuth({
 			clientSecret: githubClientSecret,
 		},
 	},
+	advanced: {
+		defaultCookieAttributes: {
+			sameSite: "None",
+			secure: true,
+		},
+	},
 	secret,
 	baseURL,
 });
