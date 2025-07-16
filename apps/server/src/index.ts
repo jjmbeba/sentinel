@@ -31,7 +31,7 @@ const app = new Elysia()
 			const redirectResponse = new Response(null, {
 				status: 302,
 				headers: {
-					Location: `${corsOrigin}/dashboard`,
+					Location: `${corsOrigin}`,
 					...(cookies && { "Set-Cookie": cookies }),
 				},
 			});
