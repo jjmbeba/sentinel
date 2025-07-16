@@ -10,18 +10,16 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as TodosRouteImport } from './routes/todos'
-import { Route as LoginRouteImport } from './routes/login'
 import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as authSignUpRouteImport } from './routes/(auth)/sign-up'
+import { Route as authLoginRouteImport } from './routes/(auth)/login'
+import { Route as authForgetPasswordRouteImport } from './routes/(auth)/forget-password'
+import { Route as authResetPasswordTokenRouteImport } from './routes/(auth)/reset-password.$token'
 
 const TodosRoute = TodosRouteImport.update({
   id: '/todos',
   path: '/todos',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const LoginRoute = LoginRouteImport.update({
-  id: '/login',
-  path: '/login',
   getParentRoute: () => rootRouteImport,
 } as any)
 const DashboardRoute = DashboardRouteImport.update({
@@ -34,39 +32,93 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const authSignUpRoute = authSignUpRouteImport.update({
+  id: '/(auth)/sign-up',
+  path: '/sign-up',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const authLoginRoute = authLoginRouteImport.update({
+  id: '/(auth)/login',
+  path: '/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const authForgetPasswordRoute = authForgetPasswordRouteImport.update({
+  id: '/(auth)/forget-password',
+  path: '/forget-password',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const authResetPasswordTokenRoute = authResetPasswordTokenRouteImport.update({
+  id: '/(auth)/reset-password/$token',
+  path: '/reset-password/$token',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/dashboard': typeof DashboardRoute
-  '/login': typeof LoginRoute
   '/todos': typeof TodosRoute
+  '/forget-password': typeof authForgetPasswordRoute
+  '/login': typeof authLoginRoute
+  '/sign-up': typeof authSignUpRoute
+  '/reset-password/$token': typeof authResetPasswordTokenRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/dashboard': typeof DashboardRoute
-  '/login': typeof LoginRoute
   '/todos': typeof TodosRoute
+  '/forget-password': typeof authForgetPasswordRoute
+  '/login': typeof authLoginRoute
+  '/sign-up': typeof authSignUpRoute
+  '/reset-password/$token': typeof authResetPasswordTokenRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/dashboard': typeof DashboardRoute
-  '/login': typeof LoginRoute
   '/todos': typeof TodosRoute
+  '/(auth)/forget-password': typeof authForgetPasswordRoute
+  '/(auth)/login': typeof authLoginRoute
+  '/(auth)/sign-up': typeof authSignUpRoute
+  '/(auth)/reset-password/$token': typeof authResetPasswordTokenRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/dashboard' | '/login' | '/todos'
+  fullPaths:
+    | '/'
+    | '/dashboard'
+    | '/todos'
+    | '/forget-password'
+    | '/login'
+    | '/sign-up'
+    | '/reset-password/$token'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/dashboard' | '/login' | '/todos'
-  id: '__root__' | '/' | '/dashboard' | '/login' | '/todos'
+  to:
+    | '/'
+    | '/dashboard'
+    | '/todos'
+    | '/forget-password'
+    | '/login'
+    | '/sign-up'
+    | '/reset-password/$token'
+  id:
+    | '__root__'
+    | '/'
+    | '/dashboard'
+    | '/todos'
+    | '/(auth)/forget-password'
+    | '/(auth)/login'
+    | '/(auth)/sign-up'
+    | '/(auth)/reset-password/$token'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   DashboardRoute: typeof DashboardRoute
-  LoginRoute: typeof LoginRoute
   TodosRoute: typeof TodosRoute
+  authForgetPasswordRoute: typeof authForgetPasswordRoute
+  authLoginRoute: typeof authLoginRoute
+  authSignUpRoute: typeof authSignUpRoute
+  authResetPasswordTokenRoute: typeof authResetPasswordTokenRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -76,13 +128,6 @@ declare module '@tanstack/react-router' {
       path: '/todos'
       fullPath: '/todos'
       preLoaderRoute: typeof TodosRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/login': {
-      id: '/login'
-      path: '/login'
-      fullPath: '/login'
-      preLoaderRoute: typeof LoginRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/dashboard': {
@@ -99,14 +144,45 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/(auth)/sign-up': {
+      id: '/(auth)/sign-up'
+      path: '/sign-up'
+      fullPath: '/sign-up'
+      preLoaderRoute: typeof authSignUpRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/(auth)/login': {
+      id: '/(auth)/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof authLoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/(auth)/forget-password': {
+      id: '/(auth)/forget-password'
+      path: '/forget-password'
+      fullPath: '/forget-password'
+      preLoaderRoute: typeof authForgetPasswordRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/(auth)/reset-password/$token': {
+      id: '/(auth)/reset-password/$token'
+      path: '/reset-password/$token'
+      fullPath: '/reset-password/$token'
+      preLoaderRoute: typeof authResetPasswordTokenRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   DashboardRoute: DashboardRoute,
-  LoginRoute: LoginRoute,
   TodosRoute: TodosRoute,
+  authForgetPasswordRoute: authForgetPasswordRoute,
+  authLoginRoute: authLoginRoute,
+  authSignUpRoute: authSignUpRoute,
+  authResetPasswordTokenRoute: authResetPasswordTokenRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

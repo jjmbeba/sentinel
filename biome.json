@@ -52,6 +52,9 @@
         "useNumberNamespace": "error",
         "noInferrableTypes": "error",
         "noUselessElse": "error"
+      },
+      "performance": {
+        "noImgElement": "off"
       }
     }
   },
@@ -60,7 +63,5 @@
       "quoteStyle": "double"
     }
   },
-  "extends": [
-    "ultracite"
-  ]
+  "extends": ["ultracite"]
 }

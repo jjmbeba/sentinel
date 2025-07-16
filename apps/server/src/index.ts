@@ -6,21 +6,53 @@ import { auth } from "./lib/auth";
 import { createContext } from "./lib/context";
 import { appRouter } from "./routers/index";
 
+const corsOrigin = process.env.CORS_ORIGIN || "";
+
 const app = new Elysia()
 	.use(
 		cors({
-			origin: process.env.CORS_ORIGIN || "",
+			origin: corsOrigin,
 			methods: ["GET", "POST", "OPTIONS"],
 			allowedHeaders: ["Content-Type", "Authorization"],
 			credentials: true,
-		}),
+		})
 	)
-	.all("/api/auth/*", async (context) => {
+	.get("/api/auth/callback/github", async (context) => {
+		// Let Better Auth handle the OAuth callback first
+		const { request } = context;
+		const response = await auth.handler(request);
+
+		// If Better Auth successfully processed the callback, redirect to frontend
+		if (response.status === 200 || response.status === 302) {
+			// Extract cookies from the Better Auth response
+			const cookies = response.headers.get("set-cookie");
+
+			// Create redirect response with the session cookies
+			const redirectResponse = new Response(null, {
+				status: 302,
+				headers: {
+					Location: `${corsOrigin}/dashboard`,
+					...(cookies && { "Set-Cookie": cookies }),
+				},
+			});
+
+			return redirectResponse;
+		}
+
+		// If something went wrong, redirect to login
+		return new Response(null, {
+			status: 302,
+			headers: {
+				Location: `${corsOrigin}/login`,
+			},
+		});
+	})
+	.all("/api/auth/*", (context) => {
 		const { request } = context;
 		if (["POST", "GET"].includes(request.method)) {
 			return auth.handler(request);
 		}
-		context.error(405);
+		return context.error(405);
 	})
 	.all("/trpc/*", async (context) => {
 		const res = await fetchRequestHandler({
@@ -33,5 +65,5 @@ const app = new Elysia()
 	})
 	.get("/", () => "OK")
 	.listen(3000, () => {
-		console.log("Server is running on http://localhost:3000");
+		// Server is running on http://localhost:3000
 	});

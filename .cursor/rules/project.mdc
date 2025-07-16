@@ -1,0 +1,151 @@
+Please adapt the globs depending on your project structure.
+
+---
+name: dotenv-best-practices.mdc
+description: Best practices for using dotenv in Node.js applications
+globs: **/*.{ts,js}
+---
+
+- Load environment variables at the start of your application
+- Use a `.env.example` file to document required environment variables
+- Avoid committing `.env` files to version control
+
+---
+name: zod-best-practices.mdc
+description: Best practices for schema validation with Zod
+globs: **/*.{ts,tsx}
+---
+
+- Define schemas for all data inputs and outputs
+- Use `.refine()` for custom validation logic
+- Leverage TypeScript inference for type safety
+
+---
+name: trpc-best-practices.mdc
+description: Best practices for using tRPC in applications
+globs: **/*.{ts,tsx}
+---
+
+- Use routers to organize your API endpoints
+- Implement middleware for authentication and authorization
+- Utilize `createReactQueryHooks` for seamless integration with React Query
+
+---
+name: elysia-best-practices.mdc
+description: Best practices for building APIs with Elysia
+globs: **/*.{ts,js}
+---
+
+- Use built-in middleware for CORS and error handling
+- Structure routes logically for better maintainability
+- Implement validation for incoming requests
+
+---
+name: drizzle-orm-best-practices.mdc
+description: Best practices for using Drizzle ORM with databases
+globs: **/*.{ts,js}
+---
+
+- Define models and migrations clearly
+- Use transactions for batch operations
+- Keep database queries optimized and indexed
+
+---
+name: vite-best-practices.mdc
+description: Best practices for Vite applications
+globs: **/*.{ts,tsx,js,jsx}
+---
+
+- Use Vite's built-in support for hot module replacement
+- Optimize assets with Vite's build configuration
+- Leverage plugins for enhanced functionality (e.g., React, Tailwind)
+
+---
+name: tailwindcss-best-practices.mdc
+description: Best practices for styling with Tailwind CSS
+globs: **/*.{ts,tsx,css}
+---
+
+- Use utility-first classes for rapid styling
+- Create custom themes using Tailwind's configuration
+- Ensure responsive design with Tailwind's responsive utilities
+
+---
+name: react-best-practices.mdc
+description: Best practices for React applications
+globs: **/*.{ts,tsx}
+---
+
+- Use functional components and hooks for state management
+- Implement prop types or TypeScript for type safety
+- Optimize performance with React.memo and useCallback
+
+---
+name: better-auth-best-practices.mdc
+description: Best practices for authentication with Better Auth
+globs: **/*.{ts,js}
+---
+
+- Use session management for user authentication
+- Implement role-based access control
+- Secure sensitive routes with middleware
+
+---
+name: postcss-best-practices.mdc
+description: Best practices for using PostCSS in projects
+globs: **/*.{css}
+---
+
+- Use PostCSS plugins for autoprefixing and minification
+- Maintain a consistent CSS structure with BEM or similar methodologies
+- Optimize CSS for performance and load times
+
+---
+name: react-query-best-practices.mdc
+description: Best practices for data fetching with React Query
+globs: **/*.{ts,tsx}
+---
+
+- Use query keys for caching and refetching
+- Implement background fetching for stale data
+- Handle errors gracefully with error boundaries
+
+---
+name: class-variance-authority-best-practices.mdc
+description: Best practices for using Class Variance Authority in styling
+globs: **/*.{ts,tsx}
+---
+
+- Define variants for reusable components
+- Use TypeScript for type safety in variant definitions
+- Keep styles consistent across components with shared variants
+
+---
+name: radix-ui-best-practices.mdc
+description: Best practices for using Radix UI components
+globs: **/*.{ts,tsx}
+---
+
+- Use Radix components for accessibility and customization
+- Follow the documentation for proper usage and theming
+- Ensure components are responsive and mobile-friendly
+
+---
+name: tanstack-router-best-practices.mdc
+description: Best practices for routing with TanStack Router
+globs: **/*.{ts,tsx}
+---
+
+- Use nested routes for better organization
+- Implement route guards for protected routes
+- Leverage data loading strategies for efficient data fetching
+
+---
+name: sonner-best-practices.mdc
+description: Best practices for using Sonner for notifications
+globs: **/*.{ts,tsx}
+---
+
+- Use context providers for global notification management
+- Customize notification styles for better UX
+- Implement dismissible notifications for user control

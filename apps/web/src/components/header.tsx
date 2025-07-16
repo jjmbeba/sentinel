@@ -1,4 +1,4 @@
-import { Link, linkOptions } from "@tanstack/react-router";
+import { Link, linkOptions, useRouterState } from "@tanstack/react-router";
 import { cn } from "@/lib/utils";
 import { ModeToggle } from "./mode-toggle";
 import { buttonVariants } from "./ui/button";
@@ -11,6 +11,21 @@ export default function Header() {
 		{ to: "/todos", label: "Todos" },
 	]);
 
+	const pathname = useRouterState({
+		select: (s) => s.location.pathname,
+	});
+
+	const excludedPaths = [
+		"/login",
+		"/sign-up",
+		"/forget-password",
+		"/reset-password",
+	];
+
+	if (excludedPaths.some((path) => pathname.startsWith(path))) {
+		return null;
+	}
+
 	return (
 		<div>
 			<div className="flex flex-row items-center justify-between px-6 py-3">
@@ -18,18 +33,18 @@ export default function Header() {
 					{links.map(({ to, label }) => {
 						return (
 							<Link
-								key={to}
-								to={to}
+								activeProps={{
+									className: "underline",
+								}}
 								className={cn(
 									buttonVariants({
 										variant: "link",
 										size: "sm",
 										effect: "hoverUnderline",
-									}),
+									})
 								)}
-								activeProps={{
-									className: "underline",
-								}}
+								key={to}
+								to={to}
 							>
 								{label}
 							</Link>
