@@ -25,18 +25,27 @@ const app = new Elysia()
 		// If Better Auth successfully processed the callback, redirect to frontend
 		if (response.status === 200 || response.status === 302) {
 			// Extract cookies from the Better Auth response
-			const cookies = response.headers.get("set-cookie");
+			const cookies = response.headers.getSetCookie
+				? response.headers.getSetCookie()
+				: response.headers.get("set-cookie");
 
 			// Create redirect response with the session cookies
-			const redirectResponse = new Response(null, {
-				status: 302,
-				headers: {
-					Location: `${corsOrigin}`,
-					...(cookies && { "Set-Cookie": cookies }),
-				},
-			});
+			const headers = new Headers();
+			headers.set("Location", `${corsOrigin}/dashboard`);
+			if (cookies) {
+				if (Array.isArray(cookies)) {
+					for (const cookie of cookies) {
+						headers.append("Set-Cookie", cookie);
+					}
+				} else {
+					headers.append("Set-Cookie", cookies);
+				}
+			}
 
-			return redirectResponse;
+			return new Response(null, {
+				status: 302,
+				headers,
+			});
 		}
 
 		// If something went wrong, redirect to login
