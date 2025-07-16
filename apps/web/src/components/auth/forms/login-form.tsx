@@ -12,7 +12,6 @@ import EmailInput from "../common/email-auth-input";
 import ForgotPasswordLink from "../common/forgot-password-link";
 import FormField from "../common/form-field";
 import PasswordInput from "../common/password-auth-input";
-import SocialAuthButtons from "./social-auth-btns";
 
 export function LoginForm({
 	className,
@@ -120,7 +119,7 @@ export function LoginForm({
 						/>
 					)}
 				</form.Subscribe>
-				<SocialAuthButtons />
+				{/* <SocialAuthButtons /> */}
 			</div>
 			<div className="text-center text-sm">
 				Don&apos;t have an account?{" "}
