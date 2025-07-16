@@ -18,16 +18,17 @@
     "db:down": "docker compose down"
   },
   "dependencies": {
-    "dotenv": "^16.4.7",
-    "zod": "^4.0.2",
-    "@trpc/server": "^11.4.2",
-    "@trpc/client": "^11.4.2",
-    "@elysiajs/trpc": "^1.1.0",
-    "elysia": "^1.2.25",
     "@elysiajs/cors": "^1.2.0",
+    "@elysiajs/trpc": "^1.1.0",
+    "@trpc/client": "^11.4.2",
+    "@trpc/server": "^11.4.2",
+    "better-auth": "^1.2.10",
+    "dotenv": "^16.4.7",
     "drizzle-orm": "^0.44.2",
+    "elysia": "^1.2.25",
     "pg": "^8.14.1",
-    "better-auth": "^1.2.10"
+    "resend": "^4.6.0",
+    "zod": "^4.0.2"
   },
   "devDependencies": {
     "tsdown": "^0.12.9",
