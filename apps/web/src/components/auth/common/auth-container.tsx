@@ -24,7 +24,11 @@ const AuthContainer = ({ authForm, type }: Props) => {
 			</div>
 			<div className="relative hidden bg-muted lg:block">
 				<img
-					alt="Placeholder"
+					alt={
+						type === "login"
+							? "Login page background"
+							: "Sign up page background"
+					}
 					className="absolute inset-0 h-full w-full object-cover dark:brightness-[0.2] dark:grayscale"
 					src={
 						type === "login"
