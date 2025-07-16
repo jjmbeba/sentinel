@@ -6,7 +6,7 @@ type Props = {
 	toggleVisibility: () => void;
 };
 
-const PasswordVisibiltyToggle = ({ isVisible, toggleVisibility }: Props) => {
+const PasswordVisibilityToggle = ({ isVisible, toggleVisibility }: Props) => {
 	return (
 		<Button
 			aria-controls="password"
@@ -27,4 +27,4 @@ const PasswordVisibiltyToggle = ({ isVisible, toggleVisibility }: Props) => {
 	);
 };
 
-export default PasswordVisibiltyToggle;
+export default PasswordVisibilityToggle;

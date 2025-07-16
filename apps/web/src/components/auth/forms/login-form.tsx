@@ -72,6 +72,7 @@ export function LoginForm({
 									message={error?.message}
 								/>
 							))}
+							htmlFor="email"
 							label="Email"
 						>
 							<EmailInput
@@ -92,6 +93,7 @@ export function LoginForm({
 									message={error?.message}
 								/>
 							))}
+							htmlFor="password"
 							label="Password"
 							optionalLink={<ForgotPasswordLink />}
 						>

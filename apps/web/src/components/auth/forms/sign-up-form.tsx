@@ -102,6 +102,7 @@ export function SignUpForm({
 									message={error?.message}
 								/>
 							))}
+							htmlFor="email"
 							label="Email"
 						>
 							<EmailInput
@@ -122,6 +123,7 @@ export function SignUpForm({
 									message={error?.message}
 								/>
 							))}
+							htmlFor="password"
 							label="Password"
 						>
 							<PasswordInput
@@ -144,6 +146,7 @@ export function SignUpForm({
 									message={error?.message}
 								/>
 							))}
+							htmlFor="confirmPassword"
 							label="Confirm Password"
 						>
 							<PasswordInput
