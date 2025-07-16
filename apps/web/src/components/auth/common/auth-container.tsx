@@ -32,8 +32,8 @@ const AuthContainer = ({ authForm, type }: Props) => {
 					className="absolute inset-0 h-full w-full object-cover dark:brightness-[0.2] dark:grayscale"
 					src={
 						type === "login"
-							? "https://df4174a30r.ufs.sh/f/v02GcThk7I16o5P44VfjJqZtWflPxRkhop9KsDaQ1rUiBOMu"
-							: "https://df4174a30r.ufs.sh/f/v02GcThk7I16i7LQ83t9cIgTaUmGWoASQM5pXt2enhvP0Fzs"
+							? "/login-background.webp"
+							: "/sign-up-background.webp"
 					}
 				/>
 			</div>
