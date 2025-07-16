@@ -1,4 +1,5 @@
 import { Link, useRouterState } from "@tanstack/react-router";
+import { useMemo } from "react";
 import {
 	Breadcrumb,
 	BreadcrumbItem,
@@ -9,8 +10,13 @@ import {
 import { capitalize } from "@/lib/utils";
 
 const RouteBreadcrumbs = () => {
-	const { location } = useRouterState();
-	const breadcrumbs = location.pathname.split("/").filter(Boolean);
+	const {
+		location: { pathname },
+	} = useRouterState();
+	const breadcrumbs = useMemo(
+		() => pathname.split("/").filter(Boolean),
+		[pathname]
+	);
 
 	return (
 		<Breadcrumb>
