@@ -9,20 +9,20 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as TodosRouteImport } from './routes/todos'
-import { Route as DashboardRouteImport } from './routes/dashboard'
+import { Route as DashboardRouteRouteImport } from './routes/dashboard/route'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as DashboardIndexRouteImport } from './routes/dashboard/index'
+import { Route as DashboardTagsRouteImport } from './routes/dashboard/tags'
+import { Route as DashboardSettingsRouteImport } from './routes/dashboard/settings'
+import { Route as DashboardMyTasksRouteImport } from './routes/dashboard/my-tasks'
+import { Route as DashboardInsightsTrendsRouteImport } from './routes/dashboard/insights-trends'
+import { Route as DashboardCategoriesRouteImport } from './routes/dashboard/categories'
 import { Route as authSignUpRouteImport } from './routes/(auth)/sign-up'
 import { Route as authLoginRouteImport } from './routes/(auth)/login'
 import { Route as authForgetPasswordRouteImport } from './routes/(auth)/forget-password'
 import { Route as authResetPasswordTokenRouteImport } from './routes/(auth)/reset-password.$token'
 
-const TodosRoute = TodosRouteImport.update({
-  id: '/todos',
-  path: '/todos',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const DashboardRoute = DashboardRouteImport.update({
+const DashboardRouteRoute = DashboardRouteRouteImport.update({
   id: '/dashboard',
   path: '/dashboard',
   getParentRoute: () => rootRouteImport,
@@ -31,6 +31,36 @@ const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
+} as any)
+const DashboardIndexRoute = DashboardIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => DashboardRouteRoute,
+} as any)
+const DashboardTagsRoute = DashboardTagsRouteImport.update({
+  id: '/tags',
+  path: '/tags',
+  getParentRoute: () => DashboardRouteRoute,
+} as any)
+const DashboardSettingsRoute = DashboardSettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => DashboardRouteRoute,
+} as any)
+const DashboardMyTasksRoute = DashboardMyTasksRouteImport.update({
+  id: '/my-tasks',
+  path: '/my-tasks',
+  getParentRoute: () => DashboardRouteRoute,
+} as any)
+const DashboardInsightsTrendsRoute = DashboardInsightsTrendsRouteImport.update({
+  id: '/insights-trends',
+  path: '/insights-trends',
+  getParentRoute: () => DashboardRouteRoute,
+} as any)
+const DashboardCategoriesRoute = DashboardCategoriesRouteImport.update({
+  id: '/categories',
+  path: '/categories',
+  getParentRoute: () => DashboardRouteRoute,
 } as any)
 const authSignUpRoute = authSignUpRouteImport.update({
   id: '/(auth)/sign-up',
@@ -55,30 +85,44 @@ const authResetPasswordTokenRoute = authResetPasswordTokenRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/dashboard': typeof DashboardRoute
-  '/todos': typeof TodosRoute
+  '/dashboard': typeof DashboardRouteRouteWithChildren
   '/forget-password': typeof authForgetPasswordRoute
   '/login': typeof authLoginRoute
   '/sign-up': typeof authSignUpRoute
+  '/dashboard/categories': typeof DashboardCategoriesRoute
+  '/dashboard/insights-trends': typeof DashboardInsightsTrendsRoute
+  '/dashboard/my-tasks': typeof DashboardMyTasksRoute
+  '/dashboard/settings': typeof DashboardSettingsRoute
+  '/dashboard/tags': typeof DashboardTagsRoute
+  '/dashboard/': typeof DashboardIndexRoute
   '/reset-password/$token': typeof authResetPasswordTokenRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/dashboard': typeof DashboardRoute
-  '/todos': typeof TodosRoute
   '/forget-password': typeof authForgetPasswordRoute
   '/login': typeof authLoginRoute
   '/sign-up': typeof authSignUpRoute
+  '/dashboard/categories': typeof DashboardCategoriesRoute
+  '/dashboard/insights-trends': typeof DashboardInsightsTrendsRoute
+  '/dashboard/my-tasks': typeof DashboardMyTasksRoute
+  '/dashboard/settings': typeof DashboardSettingsRoute
+  '/dashboard/tags': typeof DashboardTagsRoute
+  '/dashboard': typeof DashboardIndexRoute
   '/reset-password/$token': typeof authResetPasswordTokenRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/dashboard': typeof DashboardRoute
-  '/todos': typeof TodosRoute
+  '/dashboard': typeof DashboardRouteRouteWithChildren
   '/(auth)/forget-password': typeof authForgetPasswordRoute
   '/(auth)/login': typeof authLoginRoute
   '/(auth)/sign-up': typeof authSignUpRoute
+  '/dashboard/categories': typeof DashboardCategoriesRoute
+  '/dashboard/insights-trends': typeof DashboardInsightsTrendsRoute
+  '/dashboard/my-tasks': typeof DashboardMyTasksRoute
+  '/dashboard/settings': typeof DashboardSettingsRoute
+  '/dashboard/tags': typeof DashboardTagsRoute
+  '/dashboard/': typeof DashboardIndexRoute
   '/(auth)/reset-password/$token': typeof authResetPasswordTokenRoute
 }
 export interface FileRouteTypes {
@@ -86,35 +130,48 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/dashboard'
-    | '/todos'
     | '/forget-password'
     | '/login'
     | '/sign-up'
+    | '/dashboard/categories'
+    | '/dashboard/insights-trends'
+    | '/dashboard/my-tasks'
+    | '/dashboard/settings'
+    | '/dashboard/tags'
+    | '/dashboard/'
     | '/reset-password/$token'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
-    | '/dashboard'
-    | '/todos'
     | '/forget-password'
     | '/login'
     | '/sign-up'
+    | '/dashboard/categories'
+    | '/dashboard/insights-trends'
+    | '/dashboard/my-tasks'
+    | '/dashboard/settings'
+    | '/dashboard/tags'
+    | '/dashboard'
     | '/reset-password/$token'
   id:
     | '__root__'
     | '/'
     | '/dashboard'
-    | '/todos'
     | '/(auth)/forget-password'
     | '/(auth)/login'
     | '/(auth)/sign-up'
+    | '/dashboard/categories'
+    | '/dashboard/insights-trends'
+    | '/dashboard/my-tasks'
+    | '/dashboard/settings'
+    | '/dashboard/tags'
+    | '/dashboard/'
     | '/(auth)/reset-password/$token'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  DashboardRoute: typeof DashboardRoute
-  TodosRoute: typeof TodosRoute
+  DashboardRouteRoute: typeof DashboardRouteRouteWithChildren
   authForgetPasswordRoute: typeof authForgetPasswordRoute
   authLoginRoute: typeof authLoginRoute
   authSignUpRoute: typeof authSignUpRoute
@@ -123,18 +180,11 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/todos': {
-      id: '/todos'
-      path: '/todos'
-      fullPath: '/todos'
-      preLoaderRoute: typeof TodosRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/dashboard': {
       id: '/dashboard'
       path: '/dashboard'
       fullPath: '/dashboard'
-      preLoaderRoute: typeof DashboardRouteImport
+      preLoaderRoute: typeof DashboardRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/': {
@@ -143,6 +193,48 @@ declare module '@tanstack/react-router' {
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/dashboard/': {
+      id: '/dashboard/'
+      path: '/'
+      fullPath: '/dashboard/'
+      preLoaderRoute: typeof DashboardIndexRouteImport
+      parentRoute: typeof DashboardRouteRoute
+    }
+    '/dashboard/tags': {
+      id: '/dashboard/tags'
+      path: '/tags'
+      fullPath: '/dashboard/tags'
+      preLoaderRoute: typeof DashboardTagsRouteImport
+      parentRoute: typeof DashboardRouteRoute
+    }
+    '/dashboard/settings': {
+      id: '/dashboard/settings'
+      path: '/settings'
+      fullPath: '/dashboard/settings'
+      preLoaderRoute: typeof DashboardSettingsRouteImport
+      parentRoute: typeof DashboardRouteRoute
+    }
+    '/dashboard/my-tasks': {
+      id: '/dashboard/my-tasks'
+      path: '/my-tasks'
+      fullPath: '/dashboard/my-tasks'
+      preLoaderRoute: typeof DashboardMyTasksRouteImport
+      parentRoute: typeof DashboardRouteRoute
+    }
+    '/dashboard/insights-trends': {
+      id: '/dashboard/insights-trends'
+      path: '/insights-trends'
+      fullPath: '/dashboard/insights-trends'
+      preLoaderRoute: typeof DashboardInsightsTrendsRouteImport
+      parentRoute: typeof DashboardRouteRoute
+    }
+    '/dashboard/categories': {
+      id: '/dashboard/categories'
+      path: '/categories'
+      fullPath: '/dashboard/categories'
+      preLoaderRoute: typeof DashboardCategoriesRouteImport
+      parentRoute: typeof DashboardRouteRoute
     }
     '/(auth)/sign-up': {
       id: '/(auth)/sign-up'
@@ -175,10 +267,31 @@ declare module '@tanstack/react-router' {
   }
 }
 
+interface DashboardRouteRouteChildren {
+  DashboardCategoriesRoute: typeof DashboardCategoriesRoute
+  DashboardInsightsTrendsRoute: typeof DashboardInsightsTrendsRoute
+  DashboardMyTasksRoute: typeof DashboardMyTasksRoute
+  DashboardSettingsRoute: typeof DashboardSettingsRoute
+  DashboardTagsRoute: typeof DashboardTagsRoute
+  DashboardIndexRoute: typeof DashboardIndexRoute
+}
+
+const DashboardRouteRouteChildren: DashboardRouteRouteChildren = {
+  DashboardCategoriesRoute: DashboardCategoriesRoute,
+  DashboardInsightsTrendsRoute: DashboardInsightsTrendsRoute,
+  DashboardMyTasksRoute: DashboardMyTasksRoute,
+  DashboardSettingsRoute: DashboardSettingsRoute,
+  DashboardTagsRoute: DashboardTagsRoute,
+  DashboardIndexRoute: DashboardIndexRoute,
+}
+
+const DashboardRouteRouteWithChildren = DashboardRouteRoute._addFileChildren(
+  DashboardRouteRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  DashboardRoute: DashboardRoute,
-  TodosRoute: TodosRoute,
+  DashboardRouteRoute: DashboardRouteRouteWithChildren,
   authForgetPasswordRoute: authForgetPasswordRoute,
   authLoginRoute: authLoginRoute,
   authSignUpRoute: authSignUpRoute,

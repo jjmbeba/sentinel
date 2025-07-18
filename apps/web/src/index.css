@@ -9,11 +9,6 @@
 		"Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
 }
 
-html,
-body {
-	@apply font-['Space_Grotesk'];
-}
-
 :root {
 	--background: oklch(0.9551 0 0);
 	--foreground: oklch(0.3211 0 0);
@@ -174,7 +169,7 @@ body {
 }
 @layer base {
 	* {
-		@apply border-border outline-ring/50;
+		@apply border-border outline-ring/50 font-['Space_Grotesk'];
 	}
 	body {
 		@apply bg-background text-foreground;
