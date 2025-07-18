@@ -22,7 +22,7 @@ export function SignUpForm({
 	const navigate = useNavigate();
 	const form = useForm({
 		validators: {
-			onBlur: signUpSchema,
+			onSubmit: signUpSchema,
 		},
 		defaultValues: {
 			email: "",

@@ -12,6 +12,7 @@ import {
 	TooltipContent,
 	TooltipTrigger,
 } from "@/components/ui/tooltip";
+import AddTaskForm from "./add-task-form";
 
 const AddTaskButton = () => {
 	const [isOpen, setIsOpen] = useState(false);
@@ -32,6 +33,7 @@ const AddTaskButton = () => {
 					<DialogHeader>
 						<DialogTitle>Add Task</DialogTitle>
 					</DialogHeader>
+					<AddTaskForm />
 				</DialogContent>
 			</Dialog>
 		</>
