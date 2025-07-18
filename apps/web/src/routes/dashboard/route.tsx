@@ -1,4 +1,5 @@
-import { createFileRoute, Outlet, redirect } from "@tanstack/react-router";
+import { createFileRoute, Outlet } from "@tanstack/react-router";
+import { useEffect } from "react";
 import { AppSidebar } from "@/components/sidebar/app-sidebar";
 import RouteBreadcrumbs from "@/components/sidebar/route-breadcrumbs";
 import { Separator } from "@/components/ui/separator";
@@ -7,22 +8,29 @@ import {
 	SidebarProvider,
 	SidebarTrigger,
 } from "@/components/ui/sidebar";
+import { useSession } from "@/lib/auth-client";
 
 export const Route = createFileRoute("/dashboard")({
 	component: RouteComponent,
-	beforeLoad: ({ context }) => {
-		if (!context.auth?.isAuthenticated) {
-			throw redirect({
-				to: "/login",
-				search: {
-					redirect: location.href,
-				},
-			});
-		}
-	},
 });
 
 function RouteComponent() {
+	const { data: session, isPending } = useSession();
+
+	const navigate = Route.useNavigate();
+
+	useEffect(() => {
+		if (!(session || isPending)) {
+			navigate({
+				to: "/login",
+			});
+		}
+	}, [session, isPending, navigate]);
+
+	if (isPending) {
+		return <div>Loading...</div>;
+	}
+
 	return (
 		<SidebarProvider>
 			<AppSidebar />

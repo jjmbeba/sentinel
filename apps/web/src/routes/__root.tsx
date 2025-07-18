@@ -12,12 +12,10 @@ import { ThemeProvider } from "@/components/providers/theme-provider";
 import { Toaster } from "@/components/ui/sonner";
 import type { trpc } from "@/utils/trpc";
 import "../index.css";
-import type { AuthContext } from "../auth";
 
 export interface RouterAppContext {
 	trpc: typeof trpc;
 	queryClient: QueryClient;
-	auth: AuthContext | undefined;
 }
 
 export const Route = createRootRouteWithContext<RouterAppContext>()({
