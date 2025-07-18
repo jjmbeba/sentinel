@@ -32,9 +32,9 @@ export const Route = createFileRoute("/dashboard/")({
 function RouteComponent() {
 	return (
 		<div>
-			<div className="flex items-end justify-between">
+			<div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
 				<div>
-					<h1 className="scroll-m-20 pb-2 font-semibold text-4xl tracking-tight first:mt-0">
+					<h1 className="scroll-m-20 pb-2 font-semibold text-3xl tracking-tight first:mt-0 sm:text-4xl">
 						<span className="text-muted-foreground">Good Evening,</span> Sir.
 					</h1>
 					<span className="text-muted-foreground text-sm">
@@ -45,7 +45,7 @@ function RouteComponent() {
 					<Tooltip>
 						<TooltipTrigger asChild>
 							<Button size="icon" variant="outline">
-								<PlusIcon />
+								<PlusIcon className="size-4 sm:size-5" />
 							</Button>
 						</TooltipTrigger>
 						<TooltipContent>
@@ -53,12 +53,12 @@ function RouteComponent() {
 						</TooltipContent>
 					</Tooltip>
 					<Button variant="outline">
-						<PenIcon />
-						Customize
+						<PenIcon className="size-4 sm:mr-2 sm:size-5" />
+						<span className="hidden sm:inline">Customize</span>
 					</Button>
 				</div>
 			</div>
-			<div className="mt-10 grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
+			<div className="mt-6 grid max-w-[90dvw] grid-cols-1 gap-3 sm:mt-8 sm:gap-4 sm:px-4 md:grid-cols-2 md:px-6 lg:grid-cols-3">
 				<CurrentTaskCard />
 				<PendingTasksCard />
 				<TotalFocusCard />
@@ -73,7 +73,7 @@ function RouteComponent() {
 						Add Task
 					</Button>
 				</div>
-				<Tabs defaultValue="table">
+				<Tabs className="mt-4" defaultValue="table">
 					<TabsList>
 						<TabsTrigger value="table">Table</TabsTrigger>
 						<TabsTrigger value="cards">Cards</TabsTrigger>
@@ -97,27 +97,36 @@ const CurrentTaskCard = () => {
 	return (
 		<Card>
 			<CardHeader>
-				<CardTitle className="flex flex-col gap-4">
+				<CardTitle className="flex flex-col gap-2 sm:gap-4">
 					<div className="flex items-center justify-between">
-						<TargetIcon className="size-6" />
-						<span className="rounded-md border px-2 py-1 text-muted-foreground text-sm">
+						<TargetIcon className="size-4 sm:size-6" />
+						<span className="rounded-md border px-1.5 py-0.5 text-muted-foreground text-xs sm:px-2 sm:py-1 sm:text-sm">
 							04:01:00
 						</span>
 					</div>
-					<span className="text-muted-foreground">Your current task is</span>
+					<span className="text-muted-foreground text-sm sm:text-base">
+						Your current task is
+					</span>
 				</CardTitle>
 			</CardHeader>
 			<CardContent>
-				<p className="mb-6 font-semibold text-2xl">Draft Q3 Marketing Report</p>
-				<div className="flex items-center gap-2">
+				<p className="mb-4 line-clamp-2 font-semibold text-lg sm:mb-6 sm:text-2xl">
+					Draft Q3 Marketing Report
+				</p>
+				<div className="flex flex-wrap items-center gap-2">
 					<Tooltip>
 						<TooltipTrigger asChild>
 							<Button
+								className="size-8 sm:size-10"
 								onClick={() => setIsPlaying(!isPlaying)}
 								size="icon"
 								variant="outline"
 							>
-								{isPlaying ? <PauseIcon /> : <PlayIcon />}
+								{isPlaying ? (
+									<PauseIcon className="size-4 sm:size-5" />
+								) : (
+									<PlayIcon className="size-4 sm:size-5" />
+								)}
 							</Button>
 						</TooltipTrigger>
 						<TooltipContent>
@@ -126,15 +135,21 @@ const CurrentTaskCard = () => {
 					</Tooltip>
 					<Tooltip>
 						<TooltipTrigger asChild>
-							<Button size="icon" variant="outline">
-								<SquareIcon className="fill-red-500 text-red-500" />
+							<Button
+								className="size-8 sm:size-10"
+								size="icon"
+								variant="outline"
+							>
+								<SquareIcon className="size-4 fill-red-500 text-red-500 sm:size-5" />
 							</Button>
 						</TooltipTrigger>
 						<TooltipContent>
 							<p>Stop Timer</p>
 						</TooltipContent>
 					</Tooltip>
-					<Button size={"sm"}>Mark as complete</Button>
+					<Button className="h-8 text-xs sm:h-10 sm:text-sm" size="sm">
+						Mark as complete
+					</Button>
 				</div>
 			</CardContent>
 		</Card>
