@@ -1,4 +1,3 @@
-import { useQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
 import { PenIcon } from "lucide-react";
 import AddTaskButton from "@/components/dashboard/tasks/add-task-button";
@@ -7,15 +6,12 @@ import DashboardViewTabs from "@/components/dashboard/tasks/dashboard-view-tabs"
 import PendingTasksCard from "@/components/dashboard/tasks/pending-task-card";
 import TotalFocusCard from "@/components/dashboard/tasks/total-focus-card";
 import { Button } from "@/components/ui/button";
-import { trpc } from "@/utils/trpc";
 
 export const Route = createFileRoute("/dashboard/")({
 	component: RouteComponent,
 });
 
 function RouteComponent() {
-	const tasks = useQuery(trpc.task.getAll.queryOptions());
-	console.log(tasks.data);
 	return (
 		<div>
 			<div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
