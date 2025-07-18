@@ -1,5 +1,7 @@
 import { useForm } from "@tanstack/react-form";
+import { useMutation } from "@tanstack/react-query";
 import { ChevronDownIcon, Loader2Icon } from "lucide-react";
+import { toast } from "sonner";
 import FormField from "@/components/auth/common/form-field";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
@@ -20,8 +22,21 @@ import {
 import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
 import { addTaskSchema } from "@/schemas/tasks";
+import { trpc } from "@/utils/trpc";
 
 const AddTaskForm = () => {
+	const { mutate: createTask, isPending: isCreatingTask } = useMutation(
+		trpc.task.create.mutationOptions({
+			onSuccess: () => {
+				form.reset();
+				toast.success("Task created successfully");
+			},
+			onError: (error) => {
+				toast.error(error.message);
+			},
+		})
+	);
+
 	const form = useForm({
 		validators: {
 			onSubmit: addTaskSchema,
@@ -34,8 +49,8 @@ const AddTaskForm = () => {
 			priority: "low",
 			status: "todo",
 		},
-		onSubmit: async () => {
-			await new Promise((resolve) => setTimeout(resolve, 1000));
+		onSubmit: ({ value }) => {
+			createTask(value);
 		},
 	});
 
@@ -189,6 +204,9 @@ const AddTaskForm = () => {
 									>
 										<Calendar
 											captionLayout="dropdown"
+											disabled={{
+												before: new Date(),
+											}}
 											mode="single"
 											onSelect={(date) => {
 												if (date) {
@@ -229,22 +247,28 @@ const AddTaskForm = () => {
 					</form.Field>
 				</div>
 			</div>
-			<form.Subscribe
-				selector={({ canSubmit, isSubmitting }) => [canSubmit, isSubmitting]}
-			>
-				{([canSubmit, isSubmitting]) => (
-					<Button disabled={!canSubmit || isSubmitting} type="submit">
-						{isSubmitting ? (
-							<div className="flex items-center gap-2">
-								<Loader2Icon className="h-4 w-4 animate-spin" />
-								Adding...
-							</div>
-						) : (
-							"Add Task"
-						)}
-					</Button>
-				)}
-			</form.Subscribe>
+			<div className="flex w-full items-center justify-end gap-2">
+				<Button onClick={() => form.reset()}>Reset</Button>
+				<form.Subscribe
+					selector={({ canSubmit, isSubmitting }) => [canSubmit, isSubmitting]}
+				>
+					{([canSubmit, isSubmitting]) => {
+						const isLoading = isSubmitting || isCreatingTask;
+						return (
+							<Button disabled={!canSubmit || isLoading} type="submit">
+								{isLoading ? (
+									<div className="flex items-center gap-2">
+										<Loader2Icon className="h-4 w-4 animate-spin" />
+										Adding...
+									</div>
+								) : (
+									"Add Task"
+								)}
+							</Button>
+						);
+					}}
+				</form.Subscribe>
+			</div>
 		</form>
 	);
 };
