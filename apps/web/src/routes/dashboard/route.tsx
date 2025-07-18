@@ -1,4 +1,4 @@
-import { createFileRoute, Outlet } from "@tanstack/react-router";
+import { createFileRoute, Outlet, redirect } from "@tanstack/react-router";
 import { AppSidebar } from "@/components/sidebar/app-sidebar";
 import RouteBreadcrumbs from "@/components/sidebar/route-breadcrumbs";
 import { Separator } from "@/components/ui/separator";
@@ -10,6 +10,16 @@ import {
 
 export const Route = createFileRoute("/dashboard")({
 	component: RouteComponent,
+	beforeLoad: ({ context }) => {
+		if (!context.auth?.isAuthenticated) {
+			throw redirect({
+				to: "/login",
+				search: {
+					redirect: location.href,
+				},
+			});
+		}
+	},
 });
 
 function RouteComponent() {
