@@ -45,7 +45,7 @@ function RouteComponent() {
 						<RouteBreadcrumbs />
 					</div>
 				</header>
-				<div className="flex flex-1 flex-col gap-4 p-4 pt-10">
+				<div className="flex flex-1 flex-col gap-4 px-4 pt-10 sm:px-10">
 					<Outlet />
 				</div>
 			</SidebarInset>

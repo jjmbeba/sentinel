@@ -50,8 +50,8 @@ export function DataTable<TData, TValue>({
 	});
 
 	return (
-		<div className="flex max-w-[90dvw] flex-col gap-4 md:flex-row md:items-center md:justify-between">
-			<div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+		<div className="flex w-full flex-col gap-4">
+			<div className="flex max-w-[90dvw] flex-col gap-4 md:flex-row md:items-center md:justify-between">
 				<div className="flex-1">{filters}</div>
 				<div className="flex flex-col gap-2 md:flex-row md:items-center">
 					<Input
