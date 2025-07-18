@@ -1,16 +1,23 @@
 import { createFileRoute } from "@tanstack/react-router";
 import {
 	CircleDashedIcon,
+	MoreHorizontalIcon,
 	PauseIcon,
 	PenIcon,
 	PlayIcon,
 	PlusIcon,
 	SquareIcon,
 	TargetIcon,
+	TimerIcon,
 } from "lucide-react";
 import { useState } from "react";
+import { tasksColumns } from "@/components/dashboard/tasks/columns";
+import { filters, tags, tasks } from "@/components/dashboard/tasks/dummy-data";
+import { Badge } from "@/components/ui/badge";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { DataTable } from "@/components/ui/data-table";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
 	Tooltip,
 	TooltipContent,
@@ -54,6 +61,32 @@ function RouteComponent() {
 			<div className="mt-10 grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
 				<CurrentTaskCard />
 				<PendingTasksCard />
+				<TotalFocusCard />
+			</div>
+			<div className="mt-10">
+				<div className="flex items-center justify-between">
+					<h2 className="scroll-m-20 pb-2 font-semibold text-2xl tracking-tight">
+						Today's Tasks
+					</h2>
+					<Button size="sm" variant="outline">
+						<PlusIcon />
+						Add Task
+					</Button>
+				</div>
+				<Tabs defaultValue="table">
+					<TabsList>
+						<TabsTrigger value="table">Table</TabsTrigger>
+						<TabsTrigger value="cards">Cards</TabsTrigger>
+						<TabsTrigger value="calendar">Calendar</TabsTrigger>
+					</TabsList>
+					<TabsContent value="table">
+						<TasksTable />
+					</TabsContent>
+					<TabsContent value="cards">
+						<TasksCards />
+					</TabsContent>
+					<TabsContent value="calendar">Calendar view</TabsContent>
+				</Tabs>
 			</div>
 		</div>
 	);
@@ -124,5 +157,86 @@ const PendingTasksCard = () => {
 				</span>
 			</CardContent>
 		</Card>
+	);
+};
+
+const TotalFocusCard = () => {
+	return (
+		<Card>
+			<CardHeader>
+				<CardTitle className="flex flex-col gap-4">
+					<TimerIcon className="size-6" />
+					<span className="text-muted-foreground">
+						Your total focus time is
+					</span>
+				</CardTitle>
+			</CardHeader>
+			<CardContent>
+				<p className="mb-6 font-semibold text-2xl">4 hours 10 minutes</p>
+			</CardContent>
+		</Card>
+	);
+};
+
+const TaskFilters = () => {
+	return (
+		<div className="flex flex-wrap gap-2">
+			<span className="text-muted-foreground text-sm">Filter by:</span>
+			{filters.map((filter) => (
+				<Badge
+					key={filter.id}
+					variant={filter.id === "1" ? "default" : "outline"}
+				>
+					{filter.name}
+				</Badge>
+			))}
+		</div>
+	);
+};
+
+const TasksTable = () => {
+	return (
+		<div className="container mx-auto py-10">
+			<DataTable
+				columns={tasksColumns}
+				data={tasks}
+				filters={<TaskFilters />}
+			/>
+		</div>
+	);
+};
+
+const TasksCards = () => {
+	return (
+		<div className="container mx-auto py-10">
+			<TaskFilters />
+			<div className="mt-6 flex flex-col gap-4">
+				{tasks.map((task) => (
+					<Card key={task.id}>
+						<CardHeader className="flex items-center justify-between">
+							<CardTitle className="text-xl">
+								<div className="flex items-center gap-2">
+									<div className="size-2 rounded-full bg-primary" />
+									{task.title}
+								</div>
+							</CardTitle>
+							<MoreHorizontalIcon className="size-4" />
+						</CardHeader>
+						<CardContent className="flex items-center gap-4">
+							<div className="flex flex-wrap gap-2">
+								{tags.slice(6).map((tag) => (
+									<Badge key={tag.id} variant={"outline"}>
+										{tag.name}
+									</Badge>
+								))}
+							</div>
+							<p className="text-muted-foreground text-xs">
+								Logged: 45m Est: 2h 0m
+							</p>
+						</CardContent>
+					</Card>
+				))}
+			</div>
+		</div>
 	);
 };

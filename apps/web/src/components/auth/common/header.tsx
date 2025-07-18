@@ -24,6 +24,18 @@ export default function Header() {
 					>
 						Home
 					</Link>
+					<Link
+						className={cn(
+							buttonVariants({
+								variant: "link",
+								size: "sm",
+								effect: "hoverUnderline",
+							})
+						)}
+						to="/dashboard"
+					>
+						Dashboard
+					</Link>
 				</nav>
 				<div className="flex items-center gap-2">
 					<ModeToggle />
