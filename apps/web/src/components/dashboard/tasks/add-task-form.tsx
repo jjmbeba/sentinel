@@ -1,6 +1,8 @@
 import { useForm } from "@tanstack/react-form";
 import { useMutation } from "@tanstack/react-query";
+import { TagInput } from "emblor";
 import { ChevronDownIcon, Loader2Icon } from "lucide-react";
+import { useState } from "react";
 import { toast } from "sonner";
 import FormField from "@/components/auth/common/form-field";
 import { Button } from "@/components/ui/button";
@@ -36,6 +38,7 @@ const AddTaskForm = () => {
 			},
 		})
 	);
+	const [activeTagIndex, setActiveTagIndex] = useState<number | null>(null);
 
 	const form = useForm({
 		validators: {
@@ -45,6 +48,12 @@ const AddTaskForm = () => {
 			title: "",
 			description: "",
 			dueDate: new Date(),
+			tags: [
+				{
+					id: "1",
+					text: "Work",
+				},
+			],
 			time: "10:30:00",
 			priority: "low",
 			status: "todo",
@@ -104,6 +113,42 @@ const AddTaskForm = () => {
 								onBlur={field.handleBlur}
 								onChange={(e) => field.handleChange(e.target.value)}
 								value={field.state.value}
+							/>
+						</FormField>
+					)}
+				</form.Field>
+			</div>
+			<div className="grid gap-6">
+				<form.Field name="tags">
+					{(field) => (
+						<FormField
+							errors={field.state.meta.errors.map((error) => (
+								<FieldErrorMessage
+									key={error?.message}
+									message={error?.message}
+								/>
+							))}
+							htmlFor="tags"
+							label="Tags"
+						>
+							<TagInput
+								activeTagIndex={activeTagIndex}
+								placeholder="Add a tag"
+								setActiveTagIndex={setActiveTagIndex}
+								setTags={(newTags) => {
+									field.handleChange(newTags);
+								}}
+								styleClasses={{
+									inlineTagsContainer:
+										"border-input rounded-md bg-background shadow-xs transition-[color,box-shadow] focus-within:border-ring outline-none focus-within:ring-[3px] focus-within:ring-ring/50 p-1 gap-1",
+									input: "w-full min-w-[80px] shadow-none px-2 h-7",
+									tag: {
+										body: "h-7 relative bg-background border border-input hover:bg-background rounded-md font-medium text-xs ps-2 pe-7",
+										closeButton:
+											"absolute -inset-y-px -end-px p-0 rounded-e-md flex size-7 transition-[color,box-shadow] outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] text-muted-foreground/80 hover:text-foreground",
+									},
+								}}
+								tags={field.state.value}
 							/>
 						</FormField>
 					)}
@@ -248,7 +293,9 @@ const AddTaskForm = () => {
 				</div>
 			</div>
 			<div className="flex w-full items-center justify-end gap-2">
-				<Button onClick={() => form.reset()}>Reset</Button>
+				<Button onClick={() => form.reset()} type="button">
+					Reset
+				</Button>
 				<form.Subscribe
 					selector={({ canSubmit, isSubmitting }) => [canSubmit, isSubmitting]}
 				>
