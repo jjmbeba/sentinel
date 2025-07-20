@@ -1,4 +1,5 @@
 import { protectedProcedure, publicProcedure, router } from "../lib/trpc";
+import { tagRouter } from "./tag";
 import { taskRouter } from "./task";
 
 export const appRouter = router({
@@ -12,5 +13,6 @@ export const appRouter = router({
 		};
 	}),
 	task: taskRouter,
+	tag: tagRouter,
 });
 export type AppRouter = typeof appRouter;
