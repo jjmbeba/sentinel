@@ -53,9 +53,18 @@ export const formatTaskForTable = (task: TaskWithTags): TableTask => ({
 	description: task.description as string,
 	status: task.status as string,
 	priority: task.priority as string,
-	dueDate: task.dueDate ? new Date(task.dueDate) : null,
-	startDate: task.startDate ? new Date(task.startDate) : null,
-	completedAt: task.completedAt ? new Date(task.completedAt) : null,
+	dueDate:
+		task.dueDate && !Number.isNaN(Date.parse(String(task.dueDate)))
+			? new Date(task.dueDate)
+			: null,
+	startDate:
+		task.startDate && !Number.isNaN(Date.parse(String(task.startDate)))
+			? new Date(task.startDate)
+			: null,
+	completedAt:
+		task.completedAt && !Number.isNaN(Date.parse(String(task.completedAt)))
+			? new Date(task.completedAt)
+			: null,
 	createdAt: new Date(task.createdAt),
 	updatedAt: new Date(task.updatedAt),
 	estimatedDurationMinutes: Number(task.estimatedDurationMinutes),

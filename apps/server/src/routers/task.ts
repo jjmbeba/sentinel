@@ -81,7 +81,11 @@ export const taskRouter = router({
 						name: input.title,
 						description: input.description,
 						dueDate: input.dueDate,
-						estimatedDurationMinutes: Number.parseInt(input.time, 10),
+						estimatedDurationMinutes: (() => {
+							const [hours, minutes] = input.time.split(":").map(Number);
+
+							return hours * 60 + minutes;
+						})(),
 						priority: input.priority,
 						status: input.status,
 						userId,
@@ -117,13 +121,16 @@ export const taskRouter = router({
 					.where(and(eq(tasks.id, input.id), eq(tasks.userId, userId)));
 
 				await tx.delete(tags).where(
-					notExists(
-						tx
-							.select({
-								tagId: taskTags.tagId,
-							})
-							.from(taskTags)
-							.where(eq(taskTags.tagId, tags.id))
+					and(
+						notExists(
+							tx
+								.select({
+									tagId: taskTags.tagId,
+								})
+								.from(taskTags)
+								.where(eq(taskTags.tagId, tags.id))
+						),
+						eq(tags.userId, userId)
 					)
 				);
 			});

@@ -91,7 +91,10 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
 							<SidebarMenuItem key={item.label}>
 								<SidebarMenuButton asChild>
 									<Link
-										activeOptions={{ exact: true }}
+										activeOptions={{
+											exact: true,
+											includeSearch: false,
+										}}
 										activeProps={{ className: "bg-sidebar-accent" }}
 										to={item.to}
 									>

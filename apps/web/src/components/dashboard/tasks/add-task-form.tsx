@@ -1,6 +1,6 @@
 import { useForm } from "@tanstack/react-form";
 import { useMutation } from "@tanstack/react-query";
-import { TagInput } from "emblor";
+import { type Tag, TagInput } from "emblor";
 import { ChevronDownIcon, Loader2Icon } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
@@ -48,12 +48,7 @@ const AddTaskForm = () => {
 			title: "",
 			description: "",
 			dueDate: new Date(),
-			tags: [
-				{
-					id: "1",
-					text: "Work",
-				},
-			],
+			tags: [] as Tag[],
 			time: "10:30:00",
 			priority: "low",
 			status: "todo",
@@ -86,6 +81,7 @@ const AddTaskForm = () => {
 							label="Title"
 						>
 							<Input
+								id="title"
 								name="title"
 								onBlur={field.handleBlur}
 								onChange={(e) => field.handleChange(e.target.value)}
@@ -109,6 +105,7 @@ const AddTaskForm = () => {
 							label="Description"
 						>
 							<Textarea
+								id="description"
 								name="description"
 								onBlur={field.handleBlur}
 								onChange={(e) => field.handleChange(e.target.value)}
@@ -133,6 +130,7 @@ const AddTaskForm = () => {
 						>
 							<TagInput
 								activeTagIndex={activeTagIndex}
+								id="tags"
 								placeholder="Add a tag"
 								setActiveTagIndex={setActiveTagIndex}
 								setTags={(newTags) => {
@@ -173,7 +171,10 @@ const AddTaskForm = () => {
 									onValueChange={(value) => field.handleChange(value)}
 								>
 									<SelectTrigger className="w-full">
-										<SelectValue placeholder="Select a priority" />
+										<SelectValue
+											id="priority"
+											placeholder="Select a priority"
+										/>
 									</SelectTrigger>
 									<SelectContent>
 										<SelectItem value="low">Low</SelectItem>
@@ -203,7 +204,7 @@ const AddTaskForm = () => {
 									onValueChange={(value) => field.handleChange(value)}
 								>
 									<SelectTrigger className="w-full">
-										<SelectValue placeholder="Select a status" />
+										<SelectValue id="status" placeholder="Select a status" />
 									</SelectTrigger>
 									<SelectContent>
 										<SelectItem value="todo">Todo</SelectItem>
@@ -234,7 +235,7 @@ const AddTaskForm = () => {
 									<PopoverTrigger asChild>
 										<Button
 											className="w-full justify-between font-normal"
-											id="date-picker"
+											id="dueDate"
 											variant="outline"
 										>
 											{field.state.value
@@ -281,7 +282,7 @@ const AddTaskForm = () => {
 							>
 								<Input
 									className="appearance-none bg-background [&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-calendar-picker-indicator]:appearance-none"
-									id="time-picker"
+									id="time"
 									onChange={(e) => field.handleChange(e.target.value)}
 									step="1"
 									type="time"

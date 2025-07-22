@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { PenIcon } from "lucide-react";
-import z from "zod";
+import { z } from "zod";
 import AddTaskButton from "@/components/dashboard/tasks/add-task-button";
 import CurrentTaskCard from "@/components/dashboard/tasks/current-task-card";
 import DashboardViewTabs from "@/components/dashboard/tasks/dashboard-view-tabs";
