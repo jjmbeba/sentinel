@@ -76,7 +76,10 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
 	return (
 		<Sidebar collapsible="icon" {...props}>
 			<SidebarHeader>
-				<SidebarMenuButton className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground">
+				<SidebarMenuButton
+					asChild
+					className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
+				>
 					<Logo />
 				</SidebarMenuButton>
 			</SidebarHeader>
@@ -88,7 +91,10 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
 							<SidebarMenuItem key={item.label}>
 								<SidebarMenuButton asChild>
 									<Link
-										activeOptions={{ exact: true }}
+										activeOptions={{
+											exact: true,
+											includeSearch: false,
+										}}
 										activeProps={{ className: "bg-sidebar-accent" }}
 										to={item.to}
 									>

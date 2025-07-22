@@ -23,7 +23,7 @@ export function LoginForm({
 
 	const form = useForm({
 		validators: {
-			onBlur: signInSchema,
+			onSubmit: signInSchema,
 		},
 		defaultValues: {
 			email: "",

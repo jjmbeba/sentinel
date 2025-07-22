@@ -1,0 +1,324 @@
+import { useForm } from "@tanstack/react-form";
+import { useMutation } from "@tanstack/react-query";
+import { type Tag, TagInput } from "emblor";
+import { ChevronDownIcon, Loader2Icon } from "lucide-react";
+import { useState } from "react";
+import { toast } from "sonner";
+import FormField from "@/components/auth/common/form-field";
+import { Button } from "@/components/ui/button";
+import { Calendar } from "@/components/ui/calendar";
+import FieldErrorMessage from "@/components/ui/field-error-msg";
+import { Input } from "@/components/ui/input";
+import {
+	Popover,
+	PopoverContent,
+	PopoverTrigger,
+} from "@/components/ui/popover";
+import {
+	Select,
+	SelectContent,
+	SelectItem,
+	SelectTrigger,
+	SelectValue,
+} from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
+import { cn } from "@/lib/utils";
+import { addTaskSchema } from "@/schemas/tasks";
+import { trpc } from "@/utils/trpc";
+
+const AddTaskForm = () => {
+	const { mutate: createTask, isPending: isCreatingTask } = useMutation(
+		trpc.task.create.mutationOptions({
+			onSuccess: () => {
+				form.reset();
+				toast.success("Task created successfully");
+			},
+			onError: (error) => {
+				toast.error(error.message);
+			},
+		})
+	);
+	const [activeTagIndex, setActiveTagIndex] = useState<number | null>(null);
+
+	const form = useForm({
+		validators: {
+			onSubmit: addTaskSchema,
+		},
+		defaultValues: {
+			title: "",
+			description: "",
+			dueDate: new Date(),
+			tags: [] as Tag[],
+			time: "10:30:00",
+			priority: "low",
+			status: "todo",
+		},
+		onSubmit: ({ value }) => {
+			createTask(value);
+		},
+	});
+
+	return (
+		<form
+			className={cn("flex flex-col gap-6")}
+			onSubmit={(e) => {
+				e.preventDefault();
+
+				form.handleSubmit();
+			}}
+		>
+			<div className="grid gap-6">
+				<form.Field name="title">
+					{(field) => (
+						<FormField
+							errors={field.state.meta.errors.map((error) => (
+								<FieldErrorMessage
+									key={error?.message}
+									message={error?.message}
+								/>
+							))}
+							htmlFor="title"
+							label="Title"
+						>
+							<Input
+								id="title"
+								name="title"
+								onBlur={field.handleBlur}
+								onChange={(e) => field.handleChange(e.target.value)}
+								value={field.state.value}
+							/>
+						</FormField>
+					)}
+				</form.Field>
+			</div>
+			<div className="grid gap-6">
+				<form.Field name="description">
+					{(field) => (
+						<FormField
+							errors={field.state.meta.errors.map((error) => (
+								<FieldErrorMessage
+									key={error?.message}
+									message={error?.message}
+								/>
+							))}
+							htmlFor="description"
+							label="Description"
+						>
+							<Textarea
+								id="description"
+								name="description"
+								onBlur={field.handleBlur}
+								onChange={(e) => field.handleChange(e.target.value)}
+								value={field.state.value}
+							/>
+						</FormField>
+					)}
+				</form.Field>
+			</div>
+			<div className="grid gap-6">
+				<form.Field name="tags">
+					{(field) => (
+						<FormField
+							errors={field.state.meta.errors.map((error) => (
+								<FieldErrorMessage
+									key={error?.message}
+									message={error?.message}
+								/>
+							))}
+							htmlFor="tags"
+							label="Tags"
+						>
+							<TagInput
+								activeTagIndex={activeTagIndex}
+								id="tags"
+								placeholder="Add a tag"
+								setActiveTagIndex={setActiveTagIndex}
+								setTags={(newTags) => {
+									field.handleChange(newTags);
+								}}
+								styleClasses={{
+									inlineTagsContainer:
+										"border-input rounded-md bg-background shadow-xs transition-[color,box-shadow] focus-within:border-ring outline-none focus-within:ring-[3px] focus-within:ring-ring/50 p-1 gap-1",
+									input: "w-full min-w-[80px] shadow-none px-2 h-7",
+									tag: {
+										body: "h-7 relative bg-background border border-input hover:bg-background rounded-md font-medium text-xs ps-2 pe-7",
+										closeButton:
+											"absolute -inset-y-px -end-px p-0 rounded-e-md flex size-7 transition-[color,box-shadow] outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] text-muted-foreground/80 hover:text-foreground",
+									},
+								}}
+								tags={field.state.value}
+							/>
+						</FormField>
+					)}
+				</form.Field>
+			</div>
+			<div className="flex flex-col items-center gap-6 md:flex-row">
+				<div className="grid w-full gap-6">
+					<form.Field name="priority">
+						{(field) => (
+							<FormField
+								errors={field.state.meta.errors.map((error) => (
+									<FieldErrorMessage
+										key={error?.message}
+										message={error?.message}
+									/>
+								))}
+								htmlFor="priority"
+								label="Priority"
+							>
+								<Select
+									defaultValue={field.state.value}
+									onValueChange={(value) => field.handleChange(value)}
+								>
+									<SelectTrigger className="w-full">
+										<SelectValue
+											id="priority"
+											placeholder="Select a priority"
+										/>
+									</SelectTrigger>
+									<SelectContent>
+										<SelectItem value="low">Low</SelectItem>
+										<SelectItem value="medium">Medium</SelectItem>
+										<SelectItem value="high">High</SelectItem>
+									</SelectContent>
+								</Select>
+							</FormField>
+						)}
+					</form.Field>
+				</div>
+				<div className="grid w-full gap-6">
+					<form.Field name="status">
+						{(field) => (
+							<FormField
+								errors={field.state.meta.errors.map((error) => (
+									<FieldErrorMessage
+										key={error?.message}
+										message={error?.message}
+									/>
+								))}
+								htmlFor="status"
+								label="Status"
+							>
+								<Select
+									defaultValue={field.state.value}
+									onValueChange={(value) => field.handleChange(value)}
+								>
+									<SelectTrigger className="w-full">
+										<SelectValue id="status" placeholder="Select a status" />
+									</SelectTrigger>
+									<SelectContent>
+										<SelectItem value="todo">Todo</SelectItem>
+										<SelectItem value="in_progress">In Progress</SelectItem>
+										<SelectItem value="completed">Completed</SelectItem>
+									</SelectContent>
+								</Select>
+							</FormField>
+						)}
+					</form.Field>
+				</div>
+			</div>
+			<div className="flex flex-col items-center gap-6 md:flex-row">
+				<div className="grid w-full gap-6">
+					<form.Field name="dueDate">
+						{(field) => (
+							<FormField
+								errors={field.state.meta.errors.map((error) => (
+									<FieldErrorMessage
+										key={error?.message}
+										message={error?.message}
+									/>
+								))}
+								htmlFor="dueDate"
+								label="Due Date"
+							>
+								<Popover>
+									<PopoverTrigger asChild>
+										<Button
+											className="w-full justify-between font-normal"
+											id="dueDate"
+											variant="outline"
+										>
+											{field.state.value
+												? field.state.value.toLocaleDateString()
+												: "Select date"}
+											<ChevronDownIcon />
+										</Button>
+									</PopoverTrigger>
+									<PopoverContent
+										align="start"
+										className="w-auto overflow-hidden p-0"
+									>
+										<Calendar
+											captionLayout="dropdown"
+											disabled={{
+												before: new Date(),
+											}}
+											mode="single"
+											onSelect={(date) => {
+												if (date) {
+													field.handleChange(date);
+												}
+											}}
+											selected={field.state.value}
+										/>
+									</PopoverContent>
+								</Popover>
+							</FormField>
+						)}
+					</form.Field>
+				</div>
+				<div className="grid w-full gap-6">
+					<form.Field name="time">
+						{(field) => (
+							<FormField
+								errors={field.state.meta.errors.map((error) => (
+									<FieldErrorMessage
+										key={error?.message}
+										message={error?.message}
+									/>
+								))}
+								htmlFor="time"
+								label="Time"
+							>
+								<Input
+									className="appearance-none bg-background [&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-calendar-picker-indicator]:appearance-none"
+									id="time"
+									onChange={(e) => field.handleChange(e.target.value)}
+									step="1"
+									type="time"
+									value={field.state.value}
+								/>
+							</FormField>
+						)}
+					</form.Field>
+				</div>
+			</div>
+			<div className="flex w-full items-center justify-end gap-2">
+				<Button onClick={() => form.reset()} type="button">
+					Reset
+				</Button>
+				<form.Subscribe
+					selector={({ canSubmit, isSubmitting }) => [canSubmit, isSubmitting]}
+				>
+					{([canSubmit, isSubmitting]) => {
+						const isLoading = isSubmitting || isCreatingTask;
+						return (
+							<Button disabled={!canSubmit || isLoading} type="submit">
+								{isLoading ? (
+									<div className="flex items-center gap-2">
+										<Loader2Icon className="h-4 w-4 animate-spin" />
+										Adding...
+									</div>
+								) : (
+									"Add Task"
+								)}
+							</Button>
+						);
+					}}
+				</form.Subscribe>
+			</div>
+		</form>
+	);
+};
+
+export default AddTaskForm;

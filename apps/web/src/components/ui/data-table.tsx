@@ -50,17 +50,17 @@ export function DataTable<TData, TValue>({
 	});
 
 	return (
-		<div className="flex max-w-[90dvw] flex-col gap-4 md:flex-row md:items-center md:justify-between">
-			<div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+		<div className="flex w-full flex-col gap-4">
+			<div className="flex max-w-[90dvw] flex-col gap-4 md:flex-row md:items-center md:justify-between">
 				<div className="flex-1">{filters}</div>
 				<div className="flex flex-col gap-2 md:flex-row md:items-center">
 					<Input
 						className="w-full md:max-w-sm"
 						onChange={(event) =>
-							table.getColumn("title")?.setFilterValue(event.target.value)
+							table.getColumn("name")?.setFilterValue(event.target.value)
 						}
-						placeholder="Filter by title..."
-						value={(table.getColumn("title")?.getFilterValue() as string) ?? ""}
+						placeholder="Filter by name..."
+						value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
 					/>
 					<DataTableViewOptions table={table} />
 				</div>

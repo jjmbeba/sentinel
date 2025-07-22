@@ -1,23 +1,32 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { PenIcon } from "lucide-react";
+import { z } from "zod";
 import AddTaskButton from "@/components/dashboard/tasks/add-task-button";
 import CurrentTaskCard from "@/components/dashboard/tasks/current-task-card";
 import DashboardViewTabs from "@/components/dashboard/tasks/dashboard-view-tabs";
 import PendingTasksCard from "@/components/dashboard/tasks/pending-task-card";
 import TotalFocusCard from "@/components/dashboard/tasks/total-focus-card";
 import { Button } from "@/components/ui/button";
+import { useSession } from "@/lib/auth-client";
 
 export const Route = createFileRoute("/dashboard/")({
 	component: RouteComponent,
+	validateSearch: z.object({
+		tags: z.array(z.string()).optional(),
+		tab: z.enum(["table", "cards", "calendar"]).optional(),
+	}),
 });
 
 function RouteComponent() {
+	const { data: session } = useSession();
+
 	return (
 		<div>
 			<div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
 				<div>
 					<h1 className="scroll-m-20 pb-2 font-semibold text-3xl tracking-tight first:mt-0 sm:text-4xl">
-						<span className="text-muted-foreground">Good Evening,</span> Sir.
+						<span className="text-muted-foreground">Good Evening,</span>{" "}
+						{session?.user.name ?? "User"}
 					</h1>
 					<span className="text-muted-foreground text-sm">
 						Here's a look at how things are going

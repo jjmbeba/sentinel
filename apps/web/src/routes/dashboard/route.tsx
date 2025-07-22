@@ -1,5 +1,10 @@
-import { createFileRoute, Outlet } from "@tanstack/react-router";
+import {
+	createFileRoute,
+	Outlet,
+	useRouterState,
+} from "@tanstack/react-router";
 import { useEffect } from "react";
+import DashboardSkeleton from "@/components/dashboard/DashboardSkeleton";
 import { AppSidebar } from "@/components/sidebar/app-sidebar";
 import RouteBreadcrumbs from "@/components/sidebar/route-breadcrumbs";
 import { Separator } from "@/components/ui/separator";
@@ -18,6 +23,9 @@ function RouteComponent() {
 	const { data: session, isPending } = useSession();
 
 	const navigate = Route.useNavigate();
+	const isFetching = useRouterState({
+		select: (s) => s.isLoading,
+	});
 
 	useEffect(() => {
 		if (!(session || isPending)) {
@@ -27,8 +35,8 @@ function RouteComponent() {
 		}
 	}, [session, isPending, navigate]);
 
-	if (isPending) {
-		return <div>Loading...</div>;
+	if (isFetching || isPending) {
+		return <DashboardSkeleton />;
 	}
 
 	return (
@@ -45,7 +53,7 @@ function RouteComponent() {
 						<RouteBreadcrumbs />
 					</div>
 				</header>
-				<div className="flex flex-1 flex-col gap-4 p-4 pt-10">
+				<div className="flex flex-1 flex-col gap-4 px-4 pt-10 sm:px-10">
 					<Outlet />
 				</div>
 			</SidebarInset>
