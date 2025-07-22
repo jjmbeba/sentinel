@@ -1,11 +1,29 @@
 import { useQuery } from "@tanstack/react-query";
 import { getRouteApi } from "@tanstack/react-router";
-import { MoreHorizontalIcon } from "lucide-react";
+import { MoreHorizontalIcon, PencilIcon, TrashIcon } from "lucide-react";
+import { useState } from "react";
+import {
+	AlertDialog,
+	AlertDialogAction,
+	AlertDialogCancel,
+	AlertDialogContent,
+	AlertDialogDescription,
+	AlertDialogFooter,
+	AlertDialogHeader,
+	AlertDialogTitle,
+	AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+	DropdownMenu,
+	DropdownMenuContent,
+	DropdownMenuItem,
+	DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { formatTaskForTable, type TableTask } from "@/lib/utils";
 import { trpc } from "@/utils/trpc";
-import { tags } from "./dummy-data";
 import TaskFilters from "./task-filters";
 
 const TasksCards = () => {
@@ -51,19 +69,75 @@ const TaskCard = ({ task }: { task: TableTask }) => {
 						{task.name}
 					</div>
 				</CardTitle>
-				<MoreHorizontalIcon className="size-4" />
+				<TaskCardActions />
 			</CardHeader>
 			<CardContent className="flex items-center gap-4">
 				<div className="flex flex-wrap gap-2">
-					{tags.slice(6).map((tag) => (
-						<Badge key={tag.id} variant={"outline"}>
-							{tag.name}
+					{task.tags.map((tag) => (
+						<Badge key={tag} variant={"outline"}>
+							{tag}
 						</Badge>
 					))}
 				</div>
 				<p className="text-muted-foreground text-xs">Logged: 45m Est: 2h 0m</p>
 			</CardContent>
 		</Card>
+	);
+};
+
+const TaskCardActions = () => {
+	const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+	return (
+		<DropdownMenu>
+			<DropdownMenuTrigger asChild>
+				<Button size="icon" variant="ghost">
+					<MoreHorizontalIcon className="size-4" />
+				</Button>
+			</DropdownMenuTrigger>
+			<DropdownMenuContent>
+				<DropdownMenuItem>
+					<PencilIcon className="size-4" />
+					Edit
+				</DropdownMenuItem>
+				<AlertDialog
+					onOpenChange={setIsDeleteDialogOpen}
+					open={isDeleteDialogOpen}
+				>
+					<AlertDialogTrigger asChild>
+						<DropdownMenuItem
+							className="text-destructive"
+							onSelect={(e) => {
+								e.preventDefault();
+								setIsDeleteDialogOpen(true);
+							}}
+						>
+							<TrashIcon className="size-4 text-destructive" />
+							Delete
+						</DropdownMenuItem>
+					</AlertDialogTrigger>
+					<AlertDialogContent>
+						<AlertDialogHeader>
+							<AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+							<AlertDialogDescription>
+								This action cannot be undone. This will permanently delete the
+								task and remove it from your list.
+							</AlertDialogDescription>
+						</AlertDialogHeader>
+						<AlertDialogFooter>
+							<AlertDialogCancel>Cancel</AlertDialogCancel>
+							<AlertDialogAction
+								className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+								onClick={() => {
+									setIsDeleteDialogOpen(false);
+								}}
+							>
+								Delete
+							</AlertDialogAction>
+						</AlertDialogFooter>
+					</AlertDialogContent>
+				</AlertDialog>
+			</DropdownMenuContent>
+		</DropdownMenu>
 	);
 };
 

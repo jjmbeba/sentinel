@@ -1,5 +1,5 @@
 import { TRPCError } from "@trpc/server";
-import { and, eq, inArray } from "drizzle-orm";
+import { and, eq, inArray, notExists } from "drizzle-orm";
 import { z } from "zod";
 import { tags, tasks, taskTags } from "@/db/schema/core";
 import { db } from "../db";
@@ -109,11 +109,24 @@ export const taskRouter = router({
 				throw new TRPCError({ code: "UNAUTHORIZED" });
 			}
 
-			await db
-				.delete(tasks)
-				.where(
-					and(eq(tasks.id, input.id), eq(tasks.userId, ctx.session.user.id))
+			const userId = ctx.session.user.id;
+
+			await db.transaction(async (tx) => {
+				await tx
+					.delete(tasks)
+					.where(and(eq(tasks.id, input.id), eq(tasks.userId, userId)));
+
+				await tx.delete(tags).where(
+					notExists(
+						tx
+							.select({
+								tagId: taskTags.tagId,
+							})
+							.from(taskTags)
+							.where(eq(taskTags.tagId, tags.id))
+					)
 				);
+			});
 
 			return {
 				success: true,

@@ -3,7 +3,6 @@ import { useMemo } from "react";
 import {
 	Breadcrumb,
 	BreadcrumbItem,
-	BreadcrumbLink,
 	BreadcrumbList,
 	BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
@@ -23,15 +22,20 @@ const RouteBreadcrumbs = () => {
 			<BreadcrumbList>
 				<BreadcrumbItem className="hidden md:block">
 					<Link from="/" to={breadcrumbs[0]}>
-						<BreadcrumbLink>{capitalize(breadcrumbs[0])}</BreadcrumbLink>
+						{/* <BreadcrumbLink>{capitalize(breadcrumbs[0])}</BreadcrumbLink> */}
+						{capitalize(breadcrumbs[0])}
 					</Link>
 				</BreadcrumbItem>
 				{breadcrumbs.slice(1).map((breadcrumb) => (
 					<>
 						<BreadcrumbSeparator className="hidden md:block" />
 						<BreadcrumbItem key={breadcrumb}>
-							<Link to={breadcrumb}>
-								<BreadcrumbLink>{capitalize(breadcrumb)}</BreadcrumbLink>
+							<Link
+								className="transition-colors hover:text-foreground"
+								to={breadcrumb}
+							>
+								{/* <BreadcrumbLink>{capitalize(breadcrumb)}</BreadcrumbLink> */}
+								{capitalize(breadcrumb)}
 							</Link>
 						</BreadcrumbItem>
 					</>
