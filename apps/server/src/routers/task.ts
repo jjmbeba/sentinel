@@ -11,35 +11,16 @@ export const taskRouter = router({
 			throw new TRPCError({ code: "UNAUTHORIZED" });
 		}
 
-		const tasksWithTags = await db
-			.select({
-				task: tasks,
-				tag: tags,
-			})
-			.from(tasks)
-			.leftJoin(taskTags, eq(tasks.id, taskTags.taskId))
-			.leftJoin(tags, eq(taskTags.tagId, tags.id))
-			.where(eq(tasks.userId, ctx.session.user.id));
-
-		// Group tasks with their tags
-		const taskMap = new Map();
-
-		for (const row of tasksWithTags) {
-			const taskId = row.task.id;
-
-			if (!taskMap.has(taskId)) {
-				taskMap.set(taskId, {
-					...row.task,
-					tags: [],
-				});
-			}
-
-			if (row.tag) {
-				taskMap.get(taskId).tags.push(row.tag);
-			}
-		}
-
-		return Array.from(taskMap.values());
+		return await db.query.tasks.findMany({
+			where: eq(tasks.userId, ctx.session.user.id),
+			with: {
+				taskTags: {
+					with: {
+						tag: true,
+					},
+				},
+			},
+		});
 	}),
 	create: publicProcedure
 		.input(
@@ -120,5 +101,22 @@ export const taskRouter = router({
 					tags: allTags,
 				};
 			});
+		}),
+	delete: publicProcedure
+		.input(z.object({ id: z.string() }))
+		.mutation(async ({ ctx, input }) => {
+			if (!ctx.session?.user) {
+				throw new TRPCError({ code: "UNAUTHORIZED" });
+			}
+
+			await db
+				.delete(tasks)
+				.where(
+					and(eq(tasks.id, input.id), eq(tasks.userId, ctx.session.user.id))
+				);
+
+			return {
+				success: true,
+			};
 		}),
 });

@@ -12,6 +12,7 @@ export const Route = createFileRoute("/dashboard/")({
 	component: RouteComponent,
 	validateSearch: z.object({
 		tags: z.array(z.string()).optional(),
+		tab: z.enum(["table", "cards", "calendar"]).optional(),
 	}),
 });
 

@@ -57,10 +57,10 @@ export function DataTable<TData, TValue>({
 					<Input
 						className="w-full md:max-w-sm"
 						onChange={(event) =>
-							table.getColumn("title")?.setFilterValue(event.target.value)
+							table.getColumn("name")?.setFilterValue(event.target.value)
 						}
-						placeholder="Filter by title..."
-						value={(table.getColumn("title")?.getFilterValue() as string) ?? ""}
+						placeholder="Filter by name..."
+						value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
 					/>
 					<DataTableViewOptions table={table} />
 				</div>
